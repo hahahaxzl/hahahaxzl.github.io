@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "name": "2012 数学一真题",
+      "date": "2026/08/23",
+      "score": 142,
+      "note": "",
+      "volumeType": "真题"
+    },
+    {
+      "name": "2013 数学一真题",
+      "date": "2026/08/24",
+      "score": 142,
+      "note": "",
+      "volumeType": "真题"
+    },
+    {
+      "name": "2014 数学一真题",
+      "date": "2026/08/25",
+      "score": 150,
+      "note": "",
+      "volumeType": "真题"
+    },
+    {
+      "name": "2015 数学一真题",
+      "date": "2026/08/26",
+      "score": 148,
+      "note": "",
+      "volumeType": "真题"
+    },
+    {
+      "name": "2016 数学一真题",
+      "date": "2026/08/27",
+      "score": 137,
+      "note": "",
+      "volumeType": "真题"
+    }
+  ],
+  "target": 140,
+  "exam": "2026-12-26",
+  "checklist": {},
+  "updatedAt": "2026-09-04T17:57:00.000Z"
+}
