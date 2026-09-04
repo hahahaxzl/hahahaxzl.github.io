@@ -176,6 +176,23 @@
   .stat-img img{width:100%;height:auto;border-radius:12px;}
   .stat-img img:not([src]){visibility:hidden;}
 
+  /* 数学一模拟记录画廊 */
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+  @media(max-width:640px){.gallery-grid{grid-template-columns:1fr;}}
+  .gallery-item{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface);box-shadow:var(--shadow);cursor:pointer;transition:transform .3s,box-shadow .3s;}
+  .gallery-item:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(49,46,129,.14);}
+  .gallery-item img{width:100%;height:220px;object-fit:cover;display:block;transition:transform .5s;}
+  .gallery-item:hover img{transform:scale(1.05);}
+  .gallery-item::after{content:"🔍";position:absolute;right:12px;bottom:12px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;display:grid;place-items:center;font-size:14px;opacity:0;transition:opacity .3s;}
+  .gallery-item:hover::after{opacity:1;}
+
+  /* Lightbox */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:3000;padding:24px;backdrop-filter:blur(6px);}
+  .lightbox.active{display:flex;}
+  .lightbox img{max-width:100%;max-height:92vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+  .lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:36px;line-height:1;cursor:pointer;transition:transform .2s;}
+  .lightbox-close:hover{transform:scale(1.15);}
+
   /* 研究方向 */
   .research{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
   @media(max-width:760px){.research{grid-template-columns:1fr;}}
@@ -223,6 +240,7 @@
     <a href="#stats">数据</a>
     <a href="#research">研究方向</a>
     <a href="#exam">考研</a>
+    <a href="#math-records">数一</a>
     <a href="#contact">联系</a>
   </div>
   <div class="nav-right">
@@ -445,6 +463,27 @@
   </div>
 </section>
 
+<!-- 数学一模拟记录 -->
+<section id="math-records">
+  <div class="wrap">
+    <span class="eyebrow">MATH RECORDS</span>
+    <h2 class="title">数学一模拟记录</h2>
+    <p class="sub">把每一张答题卡都存档下来，错题和满分一样值得被看见。</p>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-01.jpg" alt="数学一模拟答题卡 01" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-02.jpg" alt="数学一模拟答题卡 02" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-03.jpg" alt="数学一模拟答题卡 03" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-04.jpg" alt="数学一模拟答题卡 04" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-05.jpg" alt="数学一模拟答题卡 05" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-06.jpg" alt="数学一模拟答题卡 06" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-07.jpg" alt="数学一模拟答题卡 07" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-08.jpg" alt="数学一模拟答题卡 08" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-09.jpg" alt="数学一模拟答题卡 09" loading="lazy"></div>
+      <div class="gallery-item reveal"><img src="images/math-sim/sim-10.jpg" alt="数学一模拟答题卡 10" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
 <!-- 联系 -->
 <section id="contact">
   <div class="wrap contact">
@@ -521,6 +560,30 @@
     });
   },{threshold:.3});
   if(exam) examIO.observe(exam);
+
+  // 数学一模拟记录 lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('.gallery-item img').forEach(img=>{
+    img.addEventListener('click', ()=>{
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lightbox.classList.add('active');
+    });
+  });
+  function closeLightbox(e){
+    if(e.target.id === 'lightbox' || e.target.closest('.lightbox-close')){
+      lightbox.classList.remove('active');
+    }
+  }
+  document.addEventListener('keydown', e=>{ if(e.key === 'Escape') lightbox.classList.remove('active'); });
 </script>
+
+<!-- 图片放大 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-close" onclick="closeLightbox(event)">×</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 </body>
 </html>
