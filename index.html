@@ -41,7 +41,7 @@
   [data-theme="dark"] .proj .tech span{color:#a5b4fc;background:rgba(129,140,248,.16);}
   [data-theme="dark"] .stack-cat h4 .bar{background:linear-gradient(var(--indigo),var(--cyan));}
   *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth;scroll-padding-top:80px;}
   body{
     font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,-apple-system,sans-serif;
     color:var(--ink); line-height:1.7;
@@ -133,7 +133,7 @@
 
   /* ---------- 卡片 ---------- */
   .card{background:var(--card);border:1px solid var(--card-bd);border-radius:var(--radius);
-    box-shadow:var(--shadow);backdrop-filter:blur(8px);padding:24px;}
+    box-shadow:var(--shadow);padding:24px;transform:translateZ(0);}
   .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;}
   .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
 
@@ -179,7 +179,7 @@
   /* 数学一模拟记录画廊 */
   .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
   @media(max-width:640px){.gallery-grid{grid-template-columns:1fr;}}
-  .gallery-item{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface);box-shadow:var(--shadow);cursor:pointer;transition:transform .3s,box-shadow .3s;}
+  .gallery-item{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--surface);box-shadow:var(--shadow);cursor:pointer;transition:transform .3s,box-shadow .3s;transform:translateZ(0);}
   .gallery-item:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(49,46,129,.14);}
   .gallery-item img{width:100%;height:220px;object-fit:cover;display:block;transition:transform .5s;}
   .gallery-item:hover img{transform:scale(1.05);}
@@ -227,7 +227,7 @@
   footer{padding:34px 0;text-align:center;color:var(--muted);font-size:13px;}
 
   /* reveal */
-  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s;}
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s;will-change:opacity,transform;}
   .reveal.show{opacity:1;transform:none;}
 </style>
 </head>
@@ -567,6 +567,9 @@
     });
   },{threshold:.3});
   if(exam) examIO.observe(exam);
+
+  // 滚动性能优化：图片异步解码，避免大图解码阻塞滚动
+  document.querySelectorAll('img').forEach(img => { img.decoding = 'async'; });
 
   // 数学一模拟记录 lightbox
   const lightbox = document.getElementById('lightbox');
