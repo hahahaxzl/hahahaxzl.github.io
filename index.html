@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- ⚠️ 把下面 title / description 里的 hahahaxzl 替换成你的真实 GitHub 用户名 -->
+<title>向泽霖 · Xiang Zelin | 复旦大学软件工程</title>
+<meta name="description" content="向泽霖（小向）的个人主页：复旦大学软件工程，AI / Agent / RAG 方向，备考 11408 考研。项目涵盖多终端系统、CUDA Attention 优化、跨模态情感分析等。" />
+<style>
+  :root{
+    --indigo:#4f46e5; --indigo-soft:#6366f1;
+    --cyan:#06b6d4; --teal:#14b8a6;
+    --coral:#ef4444; /* 朱砂强调 */
+    --gold:#e0a93b;
+    --ink:#1e293b; --ink-soft:#475569; --muted:#94a3b8;
+    --bg1:#eef2ff; --bg2:#ecfeff; --bg3:#faf5ff;
+    --card:rgba(255,255,255,.78);
+    --card-bd:rgba(255,255,255,.9);
+    --shadow:0 10px 40px rgba(49,46,129,.10);
+    --radius:20px;
+    --surface:#fff;
+    --page-bg:#f8fafc;
+    --nav-bg:rgba(255,255,255,.6);
+    --avatar-ring:rgba(255,255,255,.7);
+  }
+  [data-theme="dark"]{
+    --bg1:#1e1b4b; --bg2:#0c4a6e; --bg3:#312e81;
+    --page-bg:#0f172a;
+    --ink:#e2e8f0; --ink-soft:#cbd5e1; --muted:#7c8ba1;
+    --card:rgba(30,41,59,.72); --card-bd:rgba(148,163,184,.16);
+    --shadow:0 10px 40px rgba(0,0,0,.45);
+    --surface:#1e293b;
+    --nav-bg:rgba(15,23,42,.72);
+    --avatar-ring:rgba(148,163,184,.35);
+    --indigo:#818cf8; --indigo-soft:#a5b4fc;
+    --cyan:#22d3ee; --teal:#2dd4bf;
+    --coral:#f87171; --gold:#fbbf24;
+  }
+  [data-theme="dark"] .btn.primary{color:#0f172a;}
+  [data-theme="dark"] .kw span{color:#0f172a;}
+  [data-theme="dark"] .proj .tech span{color:#a5b4fc;background:rgba(129,140,248,.16);}
+  [data-theme="dark"] .stack-cat h4 .bar{background:linear-gradient(var(--indigo),var(--cyan));}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,-apple-system,sans-serif;
+    color:var(--ink); line-height:1.7;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, var(--bg1), transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, var(--bg2), transparent 55%),
+      radial-gradient(900px 600px at 50% 120%, var(--bg3), transparent 60%),
+      var(--page-bg);
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- 导航 ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;gap:14px;
+    padding:14px clamp(18px,5vw,64px);
+    backdrop-filter:blur(14px);
+    background:var(--nav-bg);
+    border-bottom:1px solid rgba(99,102,241,.12);
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;margin-right:auto;}
+  .brand .dot{width:12px;height:12px;border-radius:50%;
+    background:linear-gradient(135deg,var(--indigo),var(--cyan));box-shadow:0 0 14px var(--indigo-soft);}
+  .nav-links{display:flex;gap:clamp(10px,2.4vw,28px);font-size:14px;font-weight:600;color:var(--ink-soft);}
+  .nav-links a{position:relative;padding:4px 2px;transition:color .2s;}
+  .nav-links a:hover{color:var(--indigo);}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-4px;height:2px;width:0;
+    background:linear-gradient(90deg,var(--indigo),var(--cyan));transition:width .25s;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-right{display:flex;align-items:center;gap:10px;}
+  .theme-toggle,.menu-btn{flex:0 0 40px;width:40px;height:40px;border-radius:12px;
+    border:1px solid rgba(99,102,241,.25);background:var(--surface);font-size:17px;
+    cursor:pointer;display:grid;place-items:center;color:var(--ink);
+    transition:transform .18s,box-shadow .18s;}
+  .theme-toggle:hover,.menu-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(79,70,229,.2);}
+  .menu-btn{display:none;}
+  @media(max-width:640px){
+    .menu-btn{display:grid;}
+    .nav-links{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;gap:0;
+      padding:6px clamp(18px,5vw,64px);background:var(--surface);
+      border-bottom:1px solid rgba(99,102,241,.18);box-shadow:var(--shadow);}
+    .nav-links.open{display:flex;}
+    .nav-links a{padding:12px 2px;border-bottom:1px solid rgba(99,102,241,.10);}
+    .nav-links a:last-child{border-bottom:none;}
+    .nav-links a::after{display:none;}
+  }
+
+  /* ---------- 通用容器 ---------- */
+  .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,5vw,40px);}
+  section{padding:clamp(56px,9vw,96px) 0;scroll-margin-top:72px;}
+  .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:2px;
+    color:var(--indigo);background:rgba(99,102,241,.12);
+    padding:5px 14px;border-radius:999px;margin-bottom:14px;}
+  h2.title{font-size:clamp(26px,4vw,38px);font-weight:800;margin-bottom:10px;
+    background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{color:var(--ink-soft);max-width:620px;margin-bottom:34px;}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;padding:clamp(70px,12vw,120px) 0 clamp(50px,8vw,80px);}
+  .hero::before{content:"";position:absolute;inset:-20% -10% auto -10%;height:520px;z-index:-1;
+    background:conic-gradient(from 120deg at 50% 40%,rgba(99,102,241,.18),rgba(6,182,212,.16),rgba(224,169,59,.12),rgba(99,102,241,.18));
+    filter:blur(60px);animation:spin 18s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .hero-inner{display:flex;align-items:center;gap:clamp(24px,5vw,56px);flex-wrap:wrap;}
+  .avatar{flex:0 0 auto;position:relative;width:clamp(120px,18vw,168px);height:clamp(120px,18vw,168px);}
+  .avatar-in{position:relative;z-index:1;width:100%;height:100%;border-radius:30px;
+    background:linear-gradient(135deg,var(--indigo),var(--cyan));display:grid;place-items:center;
+    color:#fff;font-size:clamp(48px,8vw,72px);font-weight:800;box-shadow:var(--shadow);
+    border:4px solid var(--avatar-ring);animation:float 6s ease-in-out infinite;}
+  .avatar::before{content:"";position:absolute;inset:-7px;border-radius:36px;z-index:0;
+    background:conic-gradient(from 0deg,var(--indigo),var(--cyan),var(--gold),var(--indigo));
+    filter:blur(15px);opacity:.5;animation:spin 7s linear infinite;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+  .hero-text{flex:1 1 300px;}
+  .hero h1{font-size:clamp(34px,6vw,56px);line-height:1.1;font-weight:900;letter-spacing:.5px;}
+  .hero h1 .accent{background:linear-gradient(135deg,var(--indigo),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .role{margin-top:12px;font-size:clamp(16px,2.4vw,20px);color:var(--ink-soft);font-weight:600;}
+  .hero .role b{color:var(--indigo);}
+  .hero .tags{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;}
+  .pill{font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;
+    background:var(--surface);border:1px solid rgba(99,102,241,.2);color:var(--ink-soft);}
+  .cta{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;
+    padding:12px 22px;border-radius:14px;transition:transform .18s,box-shadow .18s;}
+  .btn.primary{background:linear-gradient(135deg,var(--indigo),var(--indigo-soft));color:#fff;box-shadow:0 8px 24px rgba(79,70,229,.35);}
+  .btn.ghost{background:var(--surface);color:var(--indigo);border:1.5px solid rgba(99,102,241,.3);}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(79,70,229,.4);}
+
+  /* ---------- 卡片 ---------- */
+  .card{background:var(--card);border:1px solid var(--card-bd);border-radius:var(--radius);
+    box-shadow:var(--shadow);backdrop-filter:blur(8px);padding:24px;}
+  .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;}
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+
+  /* About */
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start;}
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr;}}
+  .about p{color:var(--ink-soft);margin-bottom:12px;}
+  .about b{color:var(--ink);}
+  .facts{display:flex;flex-direction:column;gap:14px;}
+  .fact{display:flex;gap:12px;align-items:flex-start;}
+  .fact .ic{flex:0 0 38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:18px;
+    background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(6,182,212,.15));}
+  .fact .k{font-size:13px;color:var(--muted);}
+  .fact .v{font-weight:700;}
+
+  /* 技术栈 */
+  .stack-cat{margin-bottom:20px;}
+  .stack-cat h4{font-size:15px;margin-bottom:10px;color:var(--ink);display:flex;align-items:center;gap:8px;}
+  .stack-cat h4 .bar{width:5px;height:18px;border-radius:3px;background:linear-gradient(var(--indigo),var(--cyan));}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;}
+  .chip{font-size:13.5px;font-weight:650;padding:7px 14px;border-radius:12px;
+    background:var(--surface);border:1px solid rgba(99,102,241,.18);color:var(--ink-soft);
+    transition:transform .15s,box-shadow .15s;border-left:3px solid var(--indigo);}
+  .chip:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(79,70,229,.15);}
+
+  /* 项目 */
+  .proj{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
+  .proj .top{display:flex;align-items:center;gap:12px;}
+  .proj .emoji{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:24px;
+    background:linear-gradient(135deg,rgba(99,102,241,.14),rgba(6,182,212,.14));}
+  .proj h3{font-size:18px;font-weight:800;}
+  .proj .desc{color:var(--ink-soft);font-size:14.5px;flex:1;}
+  .proj .tech{display:flex;flex-wrap:wrap;gap:6px;}
+  .proj .tech span{font-size:11.5px;font-weight:700;color:var(--indigo);background:rgba(99,102,241,.1);padding:3px 9px;border-radius:8px;}
+  .proj .link{margin-top:4px;font-size:13.5px;font-weight:700;color:var(--cyan);}
+  .proj::after{content:"";position:absolute;right:-40px;top:-40px;width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle,rgba(6,182,212,.18),transparent 70%);transition:transform .3s;}
+  .proj:hover::after{transform:scale(1.4);}
+  .stat-img{display:grid;place-items:center;padding:18px;}
+  .stat-img img{width:100%;height:auto;border-radius:12px;}
+  .stat-img img:not([src]){visibility:hidden;}
+
+  /* 研究方向 */
+  .research{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media(max-width:760px){.research{grid-template-columns:1fr;}}
+  .research .big{background:linear-gradient(135deg,rgba(79,70,229,.06),rgba(6,182,212,.06));}
+  .research h3{font-size:20px;font-weight:800;margin-bottom:8px;}
+  .research .desc{color:var(--ink-soft);font-size:14.5px;margin-bottom:14px;}
+  .kw{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .kw span{font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:9px;color:#fff;
+    background:linear-gradient(135deg,var(--indigo),var(--cyan));}
+
+  /* 考研进度 */
+  .exam{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(224,169,59,.08));}
+  .exam h3{font-size:20px;font-weight:800;margin-bottom:6px;}
+  .exam .sub2{color:var(--ink-soft);font-size:14px;margin-bottom:18px;}
+  .prog{margin-bottom:16px;}
+  .prog .lab{display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;margin-bottom:6px;}
+  .bar-bg{height:12px;border-radius:999px;background:rgba(99,102,241,.12);overflow:hidden;}
+  .bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--indigo),var(--cyan));
+    width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1);}
+  .bar-fill.coral{background:linear-gradient(90deg,var(--coral),var(--gold));}
+
+  /* 联系 */
+  .contact{text-align:center;}
+  .contact .links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:22px;}
+  .contact .link-card{display:flex;align-items:center;gap:10px;padding:14px 22px;border-radius:16px;
+    background:var(--card);border:1px solid var(--card-bd);box-shadow:var(--shadow);font-weight:700;transition:transform .18s;}
+  .contact .link-card:hover{transform:translateY(-3px);}
+
+  footer{padding:34px 0;text-align:center;color:var(--muted);font-size:13px;}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s;}
+  .reveal.show{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<!-- ⚠️ 导航里的 hahahaxzl 替换为你的用户名 -->
+<nav>
+  <div class="brand"><span class="dot"></span>向泽霖 · Zelin</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">关于</a>
+    <a href="#stack">技术栈</a>
+    <a href="#projects">项目</a>
+    <a href="#stats">数据</a>
+    <a href="#research">研究方向</a>
+    <a href="#exam">考研</a>
+    <a href="#contact">联系</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" aria-label="切换深色/浅色">🌙</button>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()" aria-label="展开菜单">☰</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="avatar"><div class="avatar-in">泽</div></div>
+    <div class="hero-text">
+      <h1>你好，我是 <span class="accent">向泽霖</span> 👋</h1>
+      <p class="role">复旦大学 · 软件工程 &nbsp;|&nbsp; <b>AI / Agent / RAG</b> 方向 &nbsp;|&nbsp; 备考 <b>11408</b> 考研</p>
+      <div class="tags">
+        <span class="pill">🤖 智能 Agent</span>
+        <span class="pill">📚 RAG 检索增强</span>
+        <span class="pill">⚡ CUDA / 性能优化</span>
+        <span class="pill">🌐 全栈开发</span>
+      </div>
+      <div class="cta">
+        <!-- ⚠️ 把链接里的 hahahaxzl 换成你的用户名 -->
+        <a class="btn primary" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">🔗 GitHub 主页</a>
+        <a class="btn ghost" href="#projects">🚀 查看项目</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- About -->
+<section id="about">
+  <div class="wrap">
+    <span class="eyebrow">ABOUT</span>
+    <h2 class="title">关于我</h2>
+    <p class="sub">一个喜欢把想法做成系统的软件工程学生，正在 AI 与考研之间双向奔赴。</p>
+    <div class="about-grid">
+      <div class="card about">
+        <p>我是<b>向泽霖（小向）</b>，就读于<b>复旦大学软件工程专业</b>。目前主攻<b>大模型 RAG 与智能 Agent</b> 方向，也在做跨模态情感分析的研究，同时备战 <b>2027 年 11408 考研</b>（数学一 + 408）。</p>
+        <p>我相信"做出来比说出来更有说服力"——从<b>多终端早餐店系统</b>到<b>CUDA Attention 算子优化</b>，再到<b>SpaceX 星舰主题官网</b>，我喜欢用工程把抽象的知识落地。</p>
+        <p>日常工具链覆盖 SpringAI、LangGraph、DeepSeek、LoRA、Node.js、WebSocket，也愿意为了一个 benchmark 去折腾 Linux GPU 机器。</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><div class="ic">🎓</div><div><div class="k">学校 / 专业</div><div class="v">复旦大学 · 软件工程</div></div></div>
+        <div class="fact"><div class="ic">🎯</div><div><div class="k">考研目标</div><div class="v">浙大 / 清华 / 国防科大</div></div></div>
+        <div class="fact"><div class="ic">🔬</div><div><div class="k">研究方向</div><div class="v">TemPoE 跨模态情感分析</div></div></div>
+        <div class="fact"><div class="ic">📖</div><div><div class="k">当前阶段</div><div class="v">数学一 880 强化 · 408 第二轮</div></div></div>
+        <div class="fact"><div class="ic">💡</div><div><div class="k">毕业设计</div><div class="v">领域知识库轻量级智能 Agent</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 技术栈 -->
+<section id="stack">
+  <div class="wrap">
+    <span class="eyebrow">STACK</span>
+    <h2 class="title">技术栈</h2>
+    <p class="sub">从模型到工程，从前端到算力，能写能调能优化。</p>
+    <div class="card">
+      <div class="stack-cat">
+        <h4><span class="bar"></span>AI / 大模型</h4>
+        <div class="chips">
+          <span class="chip">SpringAI</span><span class="chip">LangGraph</span><span class="chip">RAG</span>
+          <span class="chip">DeepSeek</span><span class="chip">LoRA</span><span class="chip">Agent</span>
+          <span class="chip">PyTorch</span><span class="chip">Transformers</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <h4><span class="bar"></span>后端 / 系统</h4>
+        <div class="chips">
+          <span class="chip">Node.js</span><span class="chip">WebSocket</span><span class="chip">Spring Boot</span>
+          <span class="chip">CUDA / C++</span><span class="chip">Linux</span><span class="chip">nsys 性能分析</span>
+        </div>
+      </div>
+      <div class="stack-cat">
+        <h4><span class="bar"></span>前端 / 可视化</h4>
+        <div class="chips">
+          <span class="chip">HTML / CSS</span><span class="chip">JavaScript</span><span class="chip">Three.js 3D</span>
+          <span class="chip">Canvas 图表</span><span class="chip">响应式设计</span>
+        </div>
+      </div>
+      <div class="stack-cat" style="margin-bottom:0;">
+        <h4><span class="bar"></span>考研体系</h4>
+        <div class="chips">
+          <span class="chip">数学一</span><span class="chip">408 计算机基础</span><span class="chip">数据结构</span>
+          <span class="chip">计组 / 计网 / 操作系统</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 项目 -->
+<section id="projects">
+  <div class="wrap">
+    <span class="eyebrow">PROJECTS</span>
+    <h2 class="title">精选项目</h2>
+    <p class="sub">一些我真正动手做过、并且还在迭代的东西。</p>
+    <div class="grid-2">
+      <!-- ⚠️ 每个项目链接里的 hahahaxzl 替换为你的用户名/仓库名 -->
+      <div class="card proj reveal">
+        <div class="top"><div class="emoji">🥪</div><h3>多终端早餐店系统</h3></div>
+        <p class="desc">基于 Node.js + WebSocket 的实时多端系统，覆盖顾客点单、商家后台、大屏展示三端，支持实时订单推送与看板。</p>
+        <div class="tech"><span>Node.js</span><span>WebSocket</span><span>实时系统</span></div>
+        <a class="link" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="card proj reveal">
+        <div class="top"><div class="emoji">🚀</div><h3>SpaceX 星舰科技官网</h3></div>
+        <p class="desc">星舰主题科技官网，含 3D 模型展示、零部件 / 装配图、维护手册三大模块，强调分步骤说明与可视化辅助。</p>
+        <div class="tech"><span>Three.js</span><span>3D 可视化</span><span>技术文档</span></div>
+        <a class="link" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="card proj reveal">
+        <div class="top"><div class="emoji">⚡</div><h3>CUDA Attention 算子优化</h3></div>
+        <p class="desc">基于 TorchCustomOp 手写 naive Attention CUDA Kernel，对比 FlashAttention，通过 shared memory 与 memory coalescing 优化，并用 nsys 做性能分析。</p>
+        <div class="tech"><span>CUDA</span><span>FlashAttention</span><span>nsys</span></div>
+        <a class="link" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">查看仓库 →</a>
+      </div>
+
+      <div class="card proj reveal">
+        <div class="top"><div class="emoji">🎴</div><h3>二十四节气海报</h3></div>
+        <p class="desc">新中式扁平插画风系列海报，严格三色配色（鎏金 / 石青 / 朱砂），强调节气文化真实、留白意境与版面秩序。</p>
+        <div class="tech"><span>Ardot</span><span>平面设计</span><span>系列化</span></div>
+        <a class="link" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">查看作品 →</a>
+      </div>
+
+      <div class="card proj reveal">
+        <div class="top"><div class="emoji">📊</div><h3>综合理财规划（商业咨询风）</h3></div>
+        <p class="desc">为客户"张先生"制作的综合理财规划，PPT 采用商业咨询风格：强视觉冲击、克制配色、数据驱动。</p>
+        <div class="tech"><span>PPT</span><span>数据可视化</span><span>咨询风</span></div>
+        <a class="link" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">查看作品 →</a>
+      </div>
+
+      <div class="card proj reveal">
+        <div class="top"><div class="emoji">🤖</div><h3>毕业论文 · 智能 Agent</h3></div>
+        <p class="desc">面向领域知识库的轻量级智能 Agent 设计与实现，结合 RAG 与 LangGraph 构建可落地的领域问答系统。</p>
+        <div class="tech"><span>RAG</span><span>LangGraph</span><span>知识库</span></div>
+        <a class="link" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">查看详情 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GitHub 数据 -->
+<section id="stats">
+  <div class="wrap">
+    <span class="eyebrow">GITHUB STATS</span>
+    <h2 class="title">GitHub 数据</h2>
+    <p class="sub">实时从 GitHub 拉取，配色会跟随深浅主题自动切换。</p>
+    <div class="grid-2">
+      <div class="card reveal stat-img">
+        <img alt="GitHub 总览" loading="lazy"
+             data-light="https://github-readme-stats.vercel.app/api?username=hahahaxzl&amp;show_icons=true&amp;hide_border=true&amp;bg_color=00000000&amp;title_color=4f46e5&amp;text_color=475569&amp;icon_color=06b6d4"
+             data-dark="https://github-readme-stats.vercel.app/api?username=hahahaxzl&amp;show_icons=true&amp;hide_border=true&amp;bg_color=00000000&amp;title_color=a5b4fc&amp;text_color=cbd5e1&amp;icon_color=22d3ee">
+      </div>
+      <div class="card reveal stat-img">
+        <img alt="连续打卡" loading="lazy"
+             data-light="https://streak-stats.demolab.com/?user=hahahaxzl&amp;hide_border=true&amp;bg_color=00000000&amp;title_color=4f46e5&amp;text_color=475569&amp;icon_color=06b6d4&amp;ring_color=06b6d4&amp;fire_color=ef4444"
+             data-dark="https://streak-stats.demolab.com/?user=hahahaxzl&amp;hide_border=true&amp;bg_color=00000000&amp;title_color=a5b4fc&amp;text_color=cbd5e1&amp;icon_color=22d3ee&amp;ring_color=22d3ee&amp;fire_color=f87171">
+      </div>
+      <div class="card reveal stat-img">
+        <img alt="语言占比" loading="lazy"
+             data-light="https://github-readme-stats.vercel.app/api/top-langs/?username=hahahaxzl&amp;layout=compact&amp;hide_border=true&amp;bg_color=00000000&amp;title_color=4f46e5&amp;text_color=475569"
+             data-dark="https://github-readme-stats.vercel.app/api/top-langs/?username=hahahaxzl&amp;layout=compact&amp;hide_border=true&amp;bg_color=00000000&amp;title_color=a5b4fc&amp;text_color=cbd5e1">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 研究方向 -->
+<section id="research">
+  <div class="wrap">
+    <span class="eyebrow">RESEARCH</span>
+    <h2 class="title">研究方向</h2>
+    <p class="sub">学术之外，也在持续精读 RAG 与 Agent 方向的顶会论文。</p>
+    <div class="research">
+      <div class="card big reveal">
+        <h3>🧠 TemPoE · 跨模态情感分析</h3>
+        <p class="desc">时序感知跨模态小样本短视频情感分析。聚焦如何在标注稀缺下，融合视觉、文本与时序信号提升短视频情感理解。</p>
+        <div class="kw"><span>时序感知</span><span>跨模态</span><span>小样本</span><span>短视频</span><span>情感分析</span></div>
+      </div>
+      <div class="card big reveal">
+        <h3>📑 顶会论文精读</h3>
+        <p class="desc">按 8 维度框架（摘要 / 相关工作 / 架构 / 实验 / 消融 / 缺陷 / 工程落地难点 / 改进思路）逐篇拆解 RAG 与 Agent 方向论文。</p>
+        <div class="kw"><span>RAG</span><span>Agent</span><span>论文精读</span><span>系统性</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 考研进度 -->
+<section id="exam">
+  <div class="wrap">
+    <span class="eyebrow">EXAM 2027</span>
+    <h2 class="title">考研进度</h2>
+    <p class="sub">把进度可视化，是对自己最好的提醒。</p>
+    <div class="card exam reveal">
+      <h3>📌 11408 备考看板</h3>
+      <p class="sub2">目标院校：浙大 / 清华 / 国防科大 · 当前：数学一 880 强化阶段 · 408 第二轮复习</p>
+      <div class="prog">
+        <div class="lab"><span>📐 数学一（880 强化）</span><span>70%</span></div>
+        <div class="bar-bg"><div class="bar-fill" data-w="70"></div></div>
+      </div>
+      <div class="prog">
+        <div class="lab"><span>🖥️ 408 计算机基础（第二轮）</span><span>55%</span></div>
+        <div class="bar-bg"><div class="bar-fill" data-w="55"></div></div>
+      </div>
+      <div class="prog">
+        <div class="lab"><span>🔤 英语（六级 566 基础）</span><span>60%</span></div>
+        <div class="bar-bg"><div class="bar-fill coral" data-w="60"></div></div>
+      </div>
+      <div class="prog" style="margin-bottom:0;">
+        <div class="lab"><span>📝 政治（起步阶段）</span><span>30%</span></div>
+        <div class="bar-bg"><div class="bar-fill coral" data-w="30"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 联系 -->
+<section id="contact">
+  <div class="wrap contact">
+    <span class="eyebrow">CONTACT</span>
+    <h2 class="title">保持联系</h2>
+    <p class="sub" style="margin-left:auto;margin-right:auto;">欢迎交流项目、论文或考研经验 —— 一起进步更有意思。</p>
+    <div class="links">
+      <!-- ⚠️ 替换为你的真实链接 -->
+      <a class="link-card" href="https://github.com/hahahaxzl" target="_blank" rel="noopener">🐙 GitHub</a>
+      <a class="link-card" href="mailto:you@example.com">✉️ 邮箱</a>
+      <a class="link-card" href="https://www.zhihu.com/people/" target="_blank" rel="noopener">📘 知乎</a>
+      <a class="link-card" href="https://space.bilibili.com/" target="_blank" rel="noopener">📺 B 站</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © <span id="year"></span> 向泽霖 · Xiang Zelin · 用 ❤️ 与代码搭建
+</footer>
+
+<script>
+  // 当前年份
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- 深浅主题 ---------- */
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  const curTheme = () => root.getAttribute('data-theme') || 'light';
+
+  function applyTheme(t){
+    root.setAttribute('data-theme', t);
+    themeBtn.textContent = (t === 'dark') ? '☀️' : '🌙';
+    try { localStorage.setItem('theme', t); } catch(e) {}
+    // 同步 GitHub 统计卡片配色
+    document.querySelectorAll('.stat-img img').forEach(img=>{
+      const url = (t === 'dark') ? img.dataset.dark : img.dataset.light;
+      if (url) img.src = url;
+    });
+  }
+  function toggleTheme(){ applyTheme(curTheme() === 'dark' ? 'light' : 'dark'); }
+
+  // 初始主题：本地记忆 > 系统偏好
+  (function initTheme(){
+    let saved = null;
+    try { saved = localStorage.getItem('theme'); } catch(e) {}
+    const prefersDark = window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+  })();
+
+  /* ---------- 移动端菜单 ---------- */
+  const navLinks = document.getElementById('navLinks');
+  function toggleMenu(){ navLinks.classList.toggle('open'); }
+  navLinks.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // 滚动渐显
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }
+    });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // 进度条动画（进入视口才跑）
+  const exam = document.querySelector('#exam');
+  const examIO = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        exam.querySelectorAll('.bar-fill').forEach(b=>{ b.style.width = b.dataset.w + '%'; });
+        examIO.disconnect();
+      }
+    });
+  },{threshold:.3});
+  if(exam) examIO.observe(exam);
+</script>
+</body>
+</html>
