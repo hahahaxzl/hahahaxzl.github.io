@@ -773,7 +773,62 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); } catch (e) { console.warn('save failed', e); }
     // 自动镜像备份（防主存储损坏 / 误清缓存时的兜底）
     try { localStorage.setItem(STORAGE_KEY_BACKUP_DATA, JSON.stringify(rows)); } catch (e) {}
+    scheduleSync();   // 方案B：自动同步到 GitHub Pages
   }
+
+  // ===== 自动同步到 GitHub Pages（方案B）=====
+  const SYNC_URL = 'http://127.0.0.1:8765/sync';
+  let __syncTimer = null;
+  function syncPush() {
+    let payload;
+    try {
+      payload = JSON.stringify({
+        data: DATA,
+        target: targetScore,
+        exam: (typeof getExamDate === 'function') ? getExamDate() : null,
+        checklist: (typeof loadChecklist === 'function') ? loadChecklist() : null,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (e) { return; }
+    fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true, mode: 'cors' })
+      .then(r => { if (r.ok) setSyncBadge(true); })
+      .catch(() => setSyncBadge(false));
+  }
+  function scheduleSync() { clearTimeout(__syncTimer); __syncTimer = setTimeout(syncPush, 400); }
+  function setSyncBadge(ok) {
+    const b = document.getElementById('sync-badge');
+    if (!b) return;
+    b.textContent = ok ? '● 已同步 GitHub' : '○ 同步离线';
+    b.style.background = ok ? 'rgba(16,185,129,.92)' : 'rgba(100,116,139,.85)';
+    b.style.color = '#fff';
+  }
+  (function () {
+    const b = document.createElement('div');
+    b.id = 'sync-badge'; b.textContent = '○ 同步离线';
+    b.style.cssText = 'position:fixed;right:14px;bottom:14px;z-index:9999;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.15);background:rgba(100,116,139,.85);color:#fff;cursor:pointer;';
+    b.title = '点击立即同步到 GitHub';
+    b.onclick = syncPush;
+    document.body.appendChild(b);
+    fetch(SYNC_URL, { method: 'OPTIONS', mode: 'cors' }).then(() => setSyncBadge(true)).catch(() => setSyncBadge(false));
+  })();
+
+  // 方案B：线上页优先从仓库的 grades-data.json 加载最新数据（由同步服务推送）
+  (function () {
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'grades-data.json', false); // 同步：必须在 loadData 之前完成
+      xhr.send();
+      if (xhr.status === 200) {
+        const d = JSON.parse(xhr.responseText);
+        if (d && Array.isArray(d.data)) {
+          localStorage.setItem('kaoyan-grades-v1', JSON.stringify(d.data));
+          if (d.target != null) localStorage.setItem('kaoyan-grades-target-v1', String(d.target));
+          if (d.exam) localStorage.setItem('kaoyan-exam-date-v1', d.exam);
+          if (d.checklist) localStorage.setItem('kaoyan-checklist-v1', JSON.stringify(d.checklist));
+        }
+      }
+    } catch (e) { /* 离线或尚未生成数据，回退到本地 localStorage */ }
+  })();
 
   let DATA = loadData();
   let targetScore = (() => {
@@ -799,6 +854,7 @@
     targetScore = parseInt(document.getElementById('filter-target').value, 10) || 0;
     document.getElementById('target-badge').textContent = targetScore;
     localStorage.setItem(STORAGE_KEY_TARGET, String(targetScore));
+    scheduleSync();
     render();
   }
 
@@ -1588,7 +1644,7 @@
   // ===== 新增：考研倒计时 =====
   const STORAGE_KEY_EXAM = 'kaoyan-exam-date-v1';
   function getExamDate() { try { return localStorage.getItem(STORAGE_KEY_EXAM) || '2026-12-26'; } catch (e) { return '2026-12-26'; } }
-  function setExamDate(d) { try { localStorage.setItem(STORAGE_KEY_EXAM, d); } catch (e) {} updateCountdown(); }
+  function setExamDate(d) { try { localStorage.setItem(STORAGE_KEY_EXAM, d); } catch (e) {} updateCountdown(); scheduleSync(); }
   function updateCountdown() {
     const d = getExamDate();
     const el = document.getElementById('countdown-num'); if (!el) return;
@@ -1629,7 +1685,7 @@
   const CHECKLIST_YEARS = (() => { const a = []; for (let y = 2000; y <= 2026; y++) a.push(y); return a; })();
   const STORAGE_KEY_CHECKLIST = 'kaoyan-checklist-v1';
   function loadChecklist() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY_CHECKLIST) || '{}'); } catch (e) { return {}; } }
-  function saveChecklist(o) { try { localStorage.setItem(STORAGE_KEY_CHECKLIST, JSON.stringify(o)); } catch (e) {} }
+  function saveChecklist(o) { try { localStorage.setItem(STORAGE_KEY_CHECKLIST, JSON.stringify(o)); } catch (e) {} scheduleSync(); }
   let checklistState = loadChecklist();
   const CL_STATES = ['todo', 'done', 'reserved'];
   const CL_LABEL = { todo: '未做', done: '已完成', reserved: '预留未刷' };

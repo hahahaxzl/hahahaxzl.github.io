@@ -1,0 +1,9 @@
+# 本地同步 token（含 GitHub 凭证，切勿上传）
+.sync-token
+
+# 系统文件
+.DS_Store
+node_modules/
+
+# 同步服务日志
+sync-server.log
