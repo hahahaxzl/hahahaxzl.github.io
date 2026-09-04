@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>📚 考研成绩记录表｜小向专属</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --card: #ffffff;
+    --text: #1f2329;
+    --muted: #646a73;
+    --border: #e5e7eb;
+    --primary: #2f6fed;
+    --primary-soft: #eaf1ff;
+    --success: #16a34a;
+    --danger: #d93025;
+    --warning: #f59e0b;
+    --hover: #f3f6fb;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  h1 .emoji { margin-right: 6px; }
+
+  .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  button {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  button:hover { background: var(--hover); }
+  button.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+  button.primary:hover { background: #2659cc; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stat-value {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+  .stat-value.positive { color: var(--danger); }   /* 涨用红（A 股惯例） */
+  .stat-value.negative { color: var(--success); } /* 跌用绿 */
+  .stat-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .filters {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filters label {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filters select, .filters input {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    background: white;
+    color: var(--text);
+  }
+  .goal-input { width: 80px; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .badge.target { background: var(--primary-soft); color: var(--primary); }
+
+  table {
+    width: 100%;
+    background: var(--card);
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  thead {
+    background: var(--thead-bg, #fafbfc);
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  td {
+    padding: 11px 14px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+  }
+  tbody tr:hover { background: var(--hover); }
+
+  td[contenteditable="true"] {
+    cursor: text;
+    min-width: 60px;
+  }
+  td[contenteditable="true"]:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+    background: var(--primary-soft);
+  }
+
+  td.col-num { color: var(--muted); width: 50px; text-align: center; }
+  td.col-score, td.col-target, td.col-diff { font-variant-numeric: tabular-nums; font-weight: 600; text-align: center; }
+
+  .diff-pos { color: var(--danger); }   /* 超目标：涨 → 红 */
+  .diff-zero { color: var(--muted); }
+  .diff-neg { color: var(--success); }  /* 低于目标：跌 → 绿 */
+
+  select.cell-select {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    padding: 2px 4px;
+    width: 100%;
+  }
+  select.cell-select:focus { outline: 2px solid var(--primary); }
+
+  .empty {
+    padding: 40px;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .actions {
+    display: flex;
+    gap: 6px;
+  }
+  .btn-icon {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .btn-icon:hover { color: var(--danger); border-color: var(--danger); }
+
+  .hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    text-align: right;
+  }
+  .hint kbd {
+    background: var(--chip-bg, #f3f4f6);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 11px;
+  }
+
+  footer {
+    margin-top: 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    body { padding: 12px; }
+    th, td { padding: 8px 10px; font-size: 13px; }
+    .stat-value { font-size: 22px; }
+    table { display: block; overflow-x: auto; }
+  }
+
+  /* ===== 主题换肤 ===== */
+  html[data-theme="dark"] {
+    --bg:#15171c; --card:#1f232b; --text:#e8eaed; --muted:#9aa0a8;
+    --border:#2c313a; --primary:#5b8dff; --primary-soft:#1e2a44; --hover:#262b34;
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 4px 12px rgba(0,0,0,.35);
+    --thead-bg:#23272f; --chip-bg:#2c313a;
+  }
+  html[data-theme="eye"] {
+    --bg:#dcecd2; --card:#eef5e8; --text:#243a24; --muted:#5d6f5d;
+    --border:#bcd6b0; --primary:#3f8f4f; --primary-soft:#dcefdc; --hover:#e3f0da;
+    --shadow:0 1px 2px rgba(0,0,0,.05), 0 4px 12px rgba(0,0,0,.05);
+    --thead-bg:#e0eed7; --chip-bg:#d4e6c8;
+  }
+  html[data-theme="exam"] {
+    --bg:#fff5f3; --card:#ffffff; --text:#2a2422; --muted:#8a6f6a;
+    --border:#f3d6cf; --primary:#e0452f; --primary-soft:#fde4de; --hover:#fdeee9;
+    --shadow:0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+    --thead-bg:#fdeee9; --chip-bg:#f7dcd5;
+  }
+
+  /* ===== 撒花庆祝 ===== */
+  .confetti-piece {
+    position: fixed; top: -14px; width: 9px; height: 14px;
+    border-radius: 2px; z-index: 9999; pointer-events: none;
+    animation: confetti-fall 1.9s ease-in forwards;
+  }
+  @keyframes confetti-fall {
+    0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(106vh) rotate(720deg); opacity: .85; }
+  }
+
+  /* ===== 进步趋势折线图 ===== */
+  .chart-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow);
+  }
+  .chart-card h3 { margin: 0 0 8px; font-size: 13px; color: var(--muted); font-weight: 600; }
+  #chart { display: block; width: 100%; }
+
+  /* ===== 分数统计分析面板 ===== */
+  .analysis-grid { display: grid; grid-template-columns: 1.45fr 1fr; gap: 20px; }
+  .analysis-sub { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  #dist-chart { display: block; width: 100%; }
+  .analysis-metrics { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .metric { display: flex; flex-direction: column; gap: 2px; }
+  .m-label { font-size: 12px; color: var(--muted); }
+  .m-value { font-size: 21px; font-weight: 600; letter-spacing: -0.3px; }
+  .m-value.positive { color: var(--danger); }
+  .m-value.negative { color: var(--success); }
+  .m-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .m-bar { height: 6px; border-radius: 3px; background: var(--chip-bg, #f3f4f6); overflow: hidden; margin-top: 5px; }
+  .m-bar i { display: block; height: 100%; background: var(--primary); width: 0; transition: width .3s ease; }
+  @media (max-width: 768px) { .analysis-grid { grid-template-columns: 1fr; } }
+
+  /* ===== 新增：备考工具 / 筛选排序 / 错题 / 雷达 / 倒计时计时器 / 刷卷清单 ===== */
+  .toolbar-tools { display:grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap:12px; margin-bottom:14px; }
+  .tool-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 16px; box-shadow:var(--shadow); }
+  .tool-card h3 { margin:0 0 10px; font-size:13px; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; }
+  .countdown-num { font-size:34px; font-weight:700; color:var(--primary); letter-spacing:1px; line-height:1.1; }
+  .countdown-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .exam-date-input { margin-top:10px; padding:5px 8px; border:1px solid var(--border); border-radius:6px; font-size:12px; background:var(--card); color:var(--text); }
+  .timer-display { font-size:38px; font-weight:700; font-variant-numeric:tabular-nums; text-align:center; letter-spacing:1px; }
+  .timer-btns { display:flex; gap:8px; justify-content:center; margin-top:10px; }
+  .timer-btns button { min-width:64px; }
+  .timer-status { text-align:center; font-size:12px; color:var(--muted); margin-top:6px; }
+
+  .checklist-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .checklist-summary { font-size:12px; color:var(--muted); }
+  .checklist-wrap { display:grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap:6px; max-height:232px; overflow:auto; padding-right:2px; }
+  .check-item { display:flex; flex-direction:column; gap:5px; padding:7px 8px; border:1px solid var(--border); border-radius:8px; background:var(--card); cursor:pointer; transition:all .12s; }
+  .check-item:hover { border-color:var(--primary); }
+  .check-year { font-size:13px; font-weight:600; }
+  .check-year.reserved-hint::after { content:' ★'; color:var(--warning); }
+  .check-pill { font-size:11px; padding:2px 0; border-radius:10px; text-align:center; font-weight:500; }
+  .pill-todo { background:var(--chip-bg); color:var(--muted); }
+  .pill-done { background:var(--success); color:#fff; }
+  .pill-reserved { background:var(--warning); color:#fff; }
+  .checklist-hint { font-size:11px; color:var(--muted); margin-top:8px; line-height:1.5; }
+
+  .filter-group { display:flex; align-items:center; gap:6px; }
+  .filter-group label { font-size:12px; color:var(--muted); }
+
+  .backup-banner { display:none; align-items:center; gap:10px; background:var(--primary-soft); border:1px solid var(--primary); border-radius:10px; padding:10px 14px; margin-bottom:12px; font-size:13px; color:var(--text); }
+  .backup-banner .bk-text { flex:1; }
+  .backup-banner .bk-btn { background:var(--primary); border-color:var(--primary); color:#fff; }
+  .backup-banner .bk-close { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:16px; }
+
+  .chart-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .chart-head h3 { margin:0; font-size:13px; color:var(--muted); font-weight:600; }
+  .chart-dl { font-size:12px; padding:4px 10px; }
+
+  /* 分项得分单元格 */
+  .ss-wrap { display:flex; flex-direction:column; gap:3px; }
+  .ss-row { display:flex; align-items:center; gap:4px; font-size:11px; color:var(--muted); }
+  .ss-row input { width:46px; padding:2px 4px; border:1px solid var(--border); border-radius:4px; font-size:12px; background:var(--card); color:var(--text); }
+  .ss-row input:focus { outline:2px solid var(--primary); outline-offset:-2px; }
+
+  /* 卷标签下拉 */
+  .vol-select, .mock-select { border:1px solid var(--border); border-radius:6px; padding:4px 6px; font-size:12px; background:var(--card); color:var(--text); cursor:pointer; width:100%; }
+  .chk-center { text-align:center; }
+
+  /* 错题展开 */
+  .sub-row td { background:var(--hover); padding:10px 14px; }
+  .err-editor { display:flex; flex-direction:column; gap:8px; }
+  .err-editor-head { font-size:12px; color:var(--muted); font-weight:600; }
+  .err-list { display:flex; flex-direction:column; gap:6px; }
+  .err-item { display:grid; grid-template-columns: 64px 78px 118px 1fr 30px; gap:6px; align-items:start; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:6px 8px; }
+  .err-item input, .err-item select, .err-item textarea { border:1px solid var(--border); border-radius:5px; padding:4px 6px; font-size:12px; background:var(--bg); color:var(--text); font-family:inherit; width:100%; }
+  .err-item textarea { resize:vertical; min-height:34px; }
+  .err-item .err-del { background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:5px; cursor:pointer; padding:0; }
+  .err-item .err-del:hover { color:var(--danger); border-color:var(--danger); }
+  .err-add { align-self:flex-start; }
+
+  /* 统计分组 */
+  #stats { display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
+  .stat-block { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 14px; box-shadow:var(--shadow); }
+  .stat-block-head { font-size:13px; font-weight:600; color:var(--text); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .stats-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:12px; }
+
+  @media (max-width: 768px) {
+    .toolbar-tools { grid-template-columns:1fr; }
+    .err-item { grid-template-columns: 1fr 1fr; }
+    .err-item textarea { grid-column:1 / -1; }
+    .err-item .err-del { grid-column:1 / -1; }
+    .countdown-num { font-size:26px; }
+    .timer-display { font-size:30px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ============================================================
+     视觉优化增强层（仅覆盖样式，不改动任何原有功能逻辑）
+     ============================================================ */
+  :root {
+    --primary: #3b6ef5;
+    --primary-soft: #eaf1ff;
+    --success: #1aa85a;
+    --danger: #e23b2e;
+    --border: #e3e8f0;
+  }
+
+  html[data-theme="light"] body {
+    background: linear-gradient(165deg, #f6f9fe 0%, #eef3fb 55%, #e9eef7 100%);
+    min-height: 100vh;
+  }
+
+  /* 标题渐变 + 分隔 */
+  h1 {
+    font-size: 24px;
+    background: linear-gradient(120deg, #2b5fe0, #5b8dff 60%, #7aa2ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  header {
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* 按钮精致化：悬浮轻微上浮 + 阴影 */
+  button { font-weight: 500; }
+  button:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(47,111,237,.18); }
+  button:active { transform: translateY(0); }
+  button.primary:hover { box-shadow: 0 4px 14px rgba(47,111,237,.34); }
+
+  /* 统计块 / 卡片升级 */
+  .stat-block {
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
+    border: none;
+    border-left: 4px solid var(--primary);
+  }
+  .stat-block:nth-of-type(2) { border-left-color: var(--success); }
+  .stat-card {
+    border: none;
+    border-left: 4px solid var(--primary);
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-block:nth-of-type(2) .stat-card { border-left-color: var(--success); }
+  .stat-value { color: var(--text); }
+  .stat-card::after {
+    content: "";
+    position: absolute;
+    right: -22px; top: -22px;
+    width: 72px; height: 72px;
+    background: radial-gradient(circle, var(--primary-soft), transparent 70%);
+  }
+  .stat-block:nth-of-type(2) .stat-card::after {
+    background: radial-gradient(circle, rgba(26,168,90,.14), transparent 70%);
+  }
+
+  /* 图表卡片标题栏 */
+  .chart-card { overflow: hidden; }
+  .chart-head {
+    margin: -14px -16px 12px;
+    padding: 12px 16px;
+    background: linear-gradient(90deg, var(--primary-soft), transparent);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .chart-head h3 { margin: 0; color: var(--primary); }
+
+  /* 表格精致化 */
+  table { border-radius: 12px; }
+  thead th {
+    background: linear-gradient(180deg, #f7fafd, #eef3fa);
+    color: #586172;
+    font-size: 11px;
+  }
+  tbody tr { transition: background .12s; }
+  tbody tr:hover { background: #f1f6ff; }
+
+  /* 差距列：整格色块，直观红绿 */
+  td.col-diff.diff-pos { background: rgba(226,59,46,.10); }
+  td.col-diff.diff-neg { background: rgba(26,168,90,.12); }
+  td.col-diff.diff-zero { background: var(--chip-bg, #f3f4f6); }
+
+  /* 达标行：左侧柔和绿条 */
+  tr.row-hit > td:first-child { box-shadow: inset 3px 0 0 var(--success); }
+  tr.row-hit { background: rgba(26,168,90,.045); }
+
+  /* 工具卡统一视觉 */
+  .tool-card {
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
+    border: none;
+    border-top: 3px solid var(--primary);
+  }
+
+  .check-item:active { border-color: var(--primary); background: var(--primary-soft); }
+
+  /* 工具栏收进卡片 */
+  .toolbar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  /* 悬浮过渡统一 */
+  .stat-card, .tool-card, .chart-card, .stat-block {
+    transition: transform .15s, box-shadow .15s;
+  }
+  .stat-card:hover, .tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(20,40,80,.10);
+  }
+
+  /* 预测面板 */
+  .forecast {
+    display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px;
+    padding: 10px 12px; border-radius: 10px;
+    background: var(--primary-soft); color: var(--text); font-size: 12px;
+  }
+  .forecast span { white-space: normal; }
+  .forecast b { color: var(--primary); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div>
+      <h1><span class="emoji">📐</span>数学一成绩记录表</h1>
+      <div class="subtitle">小向专属 · 数学一真题 & 模拟题（满分 150）· 数据自动保存在浏览器本地（localStorage）</div>
+    </div>
+  </header>
+
+  <!-- 备份提醒 -->
+  <div class="backup-banner" id="backup-banner">
+    <span class="bk-text">💡 温柔提醒：距离上次导出备份已超过 14 天，数据只存在本浏览器，记得「导出 JSON」备份一下哦～</span>
+    <button class="bk-btn" onclick="exportJSON()">📦 现在备份</button>
+    <button class="bk-close" title="知道了" onclick="document.getElementById('backup-banner').style.display='none'">✕</button>
+  </div>
+
+  <!-- 统计卡片 -->
+  <section class="stats" id="stats"></section>
+
+  <!-- 备考辅助小工具 -->
+  <div class="toolbar-tools">
+    <!-- 考研倒计时 -->
+    <div class="tool-card">
+      <h3>⏰ 考研倒计时</h3>
+      <div class="countdown-num" id="countdown-num">— 天</div>
+      <div class="countdown-sub" id="countdown-sub">考研日期：—</div>
+      <div>
+        <label style="font-size:12px;color:var(--muted);">📅 考研日期
+          <input type="date" class="exam-date-input" id="exam-date" onchange="setExamDate(this.value)" />
+        </label>
+      </div>
+    </div>
+    <!-- 模考计时器 -->
+    <div class="tool-card">
+      <h3>⏱ 数学模考计时器</h3>
+      <div class="timer-display" id="timer-display">03:00:00</div>
+      <div class="timer-status" id="timer-status">⏸ 待开始</div>
+      <div class="timer-btns">
+        <button class="primary" onclick="startTimer()">▶ 开始</button>
+        <button onclick="pauseTimer()">⏸ 暂停</button>
+        <button onclick="resetTimer()">↺ 重置</button>
+      </div>
+    </div>
+    <!-- 数一真题刷卷清单 -->
+    <div class="tool-card">
+      <h3>📋 数一真题刷卷清单</h3>
+      <div class="checklist-head">
+        <span class="checklist-summary" id="checklist-summary">—</span>
+      </div>
+      <div class="checklist-wrap" id="checklist-wrap"></div>
+      <div class="checklist-hint">点击年份切换状态：未做 → 已完成 → 预留未刷（★ 标记 23–26 真题，适配你考前预留自测的场景）。</div>
+    </div>
+  </div>
+
+  <!-- 分数进步折线图 -->
+  <section class="chart-card">
+    <div class="chart-head">
+      <h3>📈 分数进步趋势（虚线 = 近 5 套移动平均）</h3>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="trend-sort" onchange="setTrendSort(this.value)" style="padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--card);color:var(--text);">
+          <option value="order">按录入顺序</option>
+          <option value="date">按考试日期</option>
+        </select>
+        <button class="chart-dl" onclick="downloadCanvas('chart','分数进步趋势')">⬇️ PNG</button>
+      </div>
+    </div>
+    <canvas id="chart"></canvas>
+    <div class="forecast" id="forecast" style="display:none;"></div>
+  </section>
+
+  <!-- 分数统计分析面板 -->
+  <section class="chart-card" id="analysis-card">
+    <div class="chart-head">
+      <h3>📊 分数统计分析</h3>
+      <button class="chart-dl" onclick="downloadCanvas('dist-chart','分数段分布')">⬇️ PNG</button>
+    </div>
+    <div class="analysis-grid">
+      <div class="analysis-chart">
+        <div class="analysis-sub">分数段分布（套数）</div>
+        <canvas id="dist-chart"></canvas>
+      </div>
+      <div class="analysis-metrics">
+        <div class="metric">
+          <span class="m-label">🎯 达标率（≥目标分）</span>
+          <span class="m-value" id="m-rate">—</span>
+          <span class="m-bar"><i id="m-rate-bar"></i></span>
+          <span class="m-sub" id="m-rate-sub"></span>
+        </div>
+        <div class="metric">
+          <span class="m-label">📉 最低分</span>
+          <span class="m-value" id="m-min">—</span>
+        </div>
+        <div class="metric">
+          <span class="m-label">📐 中位数</span>
+          <span class="m-value" id="m-median">—</span>
+        </div>
+        <div class="metric">
+          <span class="m-label">📊 标准差（波动）</span>
+          <span class="m-value" id="m-std">—</span>
+          <span class="m-sub">越小越稳，越大越飘</span>
+        </div>
+        <div class="metric">
+          <span class="m-label">💯 满分次数（=150）</span>
+          <span class="m-value" id="m-full">—</span>
+        </div>
+        <div class="metric">
+          <span class="m-label">🚀 进步幅度</span>
+          <span class="m-value" id="m-prog">—</span>
+          <span class="m-sub">最新一次 − 第一次（按做题顺序）</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块强弱雷达图 -->
+  <section class="chart-card">
+    <div class="chart-head">
+      <h3>🕸️ 模块强弱雷达（高数 / 线代 / 概率，基于已填分项得分）</h3>
+      <button class="chart-dl" onclick="downloadCanvas('radar-chart','模块强弱雷达')">⬇️ PNG</button>
+    </div>
+    <canvas id="radar-chart"></canvas>
+  </section>
+
+  <!-- 操作工具栏 -->
+  <div class="toolbar" style="margin-bottom:0;">
+    <button onclick="addRow()">➕ 新增一条</button>
+    <button onclick="seedData(true)">🔄 重置示例</button>
+    <button onclick="exportJSON()">💾 导出 JSON</button>
+    <button onclick="document.getElementById('import-file').click()">📥 导入 JSON</button>
+    <button onclick="document.getElementById('import-csv').click()">📥 导入 CSV</button>
+    <button class="primary" onclick="exportCSV()">📤 导出 CSV</button>
+    <button onclick="exportReport()">📄 导出报告</button>
+    <button onclick="restoreBackup()">♻️ 恢复备份</button>
+    <input type="file" id="import-file" accept="application/json,.json" style="display:none;" onchange="importJSON(this)" />
+    <input type="file" id="import-csv" accept=".csv,text/csv" style="display:none;" onchange="importCSV(this)" />
+    <label style="margin-left:auto;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;">🎨 主题
+      <select id="theme-select" onchange="setTheme(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--card);color:var(--text);">
+        <option value="light">浅色</option>
+        <option value="dark">深色</option>
+        <option value="exam">考研红</option>
+        <option value="eye">护眼绿</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- 筛选 -->
+  <div class="filters">
+    <label>目标分 <span class="badge target" id="target-badge">130</span>
+      <input type="number" class="goal-input" id="filter-target" value="140" oninput="onTargetChange()" />
+    </label>
+    <div class="filter-group">
+      <label>卷标签
+        <select id="filter-voltype" onchange="applyFilters()">
+          <option value="all">全部</option>
+          <option value="真题">只看真题</option>
+          <option value="模拟卷">只看模拟卷</option>
+        </select>
+      </label>
+    </div>
+    <div class="filter-group">
+      <label>排序
+        <select id="sort-select" onchange="applyFilters()">
+          <option value="order">录入顺序</option>
+          <option value="date-asc">日期 ↑</option>
+          <option value="date-desc">日期 ↓</option>
+          <option value="score-asc">分数 ↑</option>
+          <option value="score-desc">分数 ↓</option>
+          <option value="name">套卷名称</option>
+        </select>
+      </label>
+    </div>
+    <label style="margin-left:auto;color:var(--muted);font-size:12px;">💡 直接点单元格就能改 · <kbd>Ctrl/⌘ + N</kbd> 新增</label>
+  </div>
+
+  <!-- 表格 -->
+  <table id="grade-table">
+    <thead>
+      <tr>
+        <th style="width:40px;">#</th>
+        <th>套卷名称</th>
+        <th style="width:104px;">考试日期</th>
+        <th style="width:92px;">卷标签</th>
+        <th style="width:116px;">模拟卷来源</th>
+        <th style="width:64px;">严格限时</th>
+        <th style="width:62px;">分数</th>
+        <th style="width:62px;">目标</th>
+        <th style="width:62px;">差距</th>
+        <th style="width:150px;">分项得分</th>
+        <th style="width:66px;">错题</th>
+        <th>错题笔记 / 备注</th>
+        <th style="width:70px;">操作</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <div class="hint">
+    提示：所有内容（成绩 · 目标分）自动存在浏览器 <kbd>localStorage</kbd>，换浏览器/清缓存会丢失，记得定期「导出 JSON」备份 📦
+  </div>
+
+  <footer>祝小向 27 考研顺利上岸 🎯</footer>
+</div>
+
+<script>
+  const STORAGE_KEY = 'kaoyan-grades-v1';
+  const STORAGE_KEY_TARGET = 'kaoyan-grades-target-v1';
+
+  function defaultSeed() {
+    return [
+      { name: '2012 数学一真题', date: '2026/08/23', score: 142, note: '' },
+      { name: '2013 数学一真题', date: '2026/08/24', score: 142, note: '' },
+      { name: '2014 数学一真题', date: '2026/08/25', score: 150, note: '' },
+      { name: '2015 数学一真题', date: '2026/08/26', score: 148, note: '' },
+      { name: '2016 数学一真题', date: '2026/08/27', score: 137, note: '' },
+    ];
+  }
+
+  function genId() { return 'e' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function normalizeError(e) {
+    if (!e || typeof e !== 'object') e = {};
+    return {
+      id: e.id || genId(),
+      no: e.no || '',
+      module: ['高数', '线代', '概率'].includes(e.module) ? e.module : '高数',
+      type: ['计算失误', '知识点不会', '审题失误', '思路想不到'].includes(e.type) ? e.type : '计算失误',
+      note: e.note || ''
+    };
+  }
+  function normalizeRow(r) {
+    if (!r || typeof r !== 'object') r = {};
+    return {
+      name: r.name || '新套卷',
+      date: r.date || '',
+      score: r.score === undefined ? '' : r.score,
+      note: r.note || '',
+      volumeType: r.volumeType === '模拟卷' ? '模拟卷' : '真题',
+      mockSource: r.mockSource || '',
+      strictTime: !!r.strictTime,
+      selScore: r.selScore === undefined ? '' : r.selScore,
+      highScore: r.highScore === undefined ? '' : r.highScore,
+      lineScore: r.lineScore === undefined ? '' : r.lineScore,
+      probScore: r.probScore === undefined ? '' : r.probScore,
+      errors: Array.isArray(r.errors) ? r.errors.map(normalizeError) : []
+    };
+  }
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultSeed().map(normalizeRow);
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return defaultSeed().map(normalizeRow);
+      return parsed.map(normalizeRow);
+    } catch (e) {
+      console.warn('load failed', e);
+      return defaultSeed().map(normalizeRow);
+    }
+  }
+
+  function saveData(rows) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); } catch (e) { console.warn('save failed', e); }
+    // 自动镜像备份（防主存储损坏 / 误清缓存时的兜底）
+    try { localStorage.setItem(STORAGE_KEY_BACKUP_DATA, JSON.stringify(rows)); } catch (e) {}
+  }
+
+  let DATA = loadData();
+  let targetScore = (() => {
+    const stored = localStorage.getItem(STORAGE_KEY_TARGET);
+    const v = stored !== null ? parseInt(stored, 10) : 140;
+    return isNaN(v) ? 130 : v;
+  })();
+  // 把持久化后的目标分回填到输入框和徽章
+  document.getElementById('filter-target').value = targetScore;
+  document.getElementById('target-badge').textContent = targetScore;
+
+  // 新增：筛选 / 排序 / 错题展开状态
+  let filterVolType = 'all';   // all | 真题 | 模拟卷
+  let sortKey = 'order';       // order | date-asc | date-desc | score-asc | score-desc | name
+  const expandedRows = new Set();
+  let trendSort = 'order';   // order | date
+  function setTrendSort(v) { trendSort = v; renderChart(); }
+  function num(v) { const n = parseFloat(v); return isNaN(n) ? -Infinity : n; }
+  const chartTargetAnim = { key: '', start: 0, active: false, rafPending: false };
+  const TARGET_ANIM_DUR = 700;
+
+  function onTargetChange() {
+    targetScore = parseInt(document.getElementById('filter-target').value, 10) || 0;
+    document.getElementById('target-badge').textContent = targetScore;
+    localStorage.setItem(STORAGE_KEY_TARGET, String(targetScore));
+    render();
+  }
+
+  function applyFilters() {
+    const vf = document.getElementById('filter-voltype');
+    const ss = document.getElementById('sort-select');
+    if (vf) filterVolType = vf.value;
+    if (ss) sortKey = ss.value;
+    render();
+  }
+
+  function currentFilteredRows() {
+    let rows = DATA.map((r, i) => ({ r, i }));
+    if (filterVolType !== 'all') {
+      rows = rows.filter(({ r }) => r.volumeType === filterVolType);
+    }
+    const cmp = {
+      'date-asc': (a, b) => (a.r.date || '').localeCompare(b.r.date || ''),
+      'date-desc': (a, b) => (b.r.date || '').localeCompare(a.r.date || ''),
+      'score-asc': (a, b) => num(a.r.score) - num(b.r.score),
+      'score-desc': (a, b) => num(b.r.score) - num(a.r.score),
+      'name': (a, b) => (a.r.name || '').localeCompare((b.r.name || ''), 'zh'),
+    };
+    if (sortKey !== 'order' && cmp[sortKey]) rows.sort(cmp[sortKey]);
+    return rows;
+  }
+
+  function render() {
+    const tbody = document.getElementById('tbody');
+    const rows = currentFilteredRows();
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="13" class="empty">🤔 暂无数据，点右上角「新增一条」开始记录吧</td></tr>`;
+    } else {
+      tbody.innerHTML = rows.map(({ r, i }, idx) => rowHTML(r, idx + 1, i) + (expandedRows.has(i) ? errSubRow(r, i) : '')).join('');
+    }
+    renderStats();
+    renderChart();
+    renderAnalysis();
+    drawRadar();
+  }
+
+  function rowHTML(r, displayIdx, dataIdx) {
+    const score = r.score === '' || r.score == null ? '' : Number(r.score);
+    const diff = score === '' || isNaN(score) ? '' : (score - targetScore);
+    let diffClass = 'diff-zero', diffText = '—';
+    if (diff !== '' && !isNaN(diff)) {
+      if (diff > 0) { diffClass = 'diff-pos'; diffText = `+${diff}`; }
+      else if (diff < 0) { diffClass = 'diff-neg'; diffText = `${diff}`; }
+      else { diffText = '0'; }
+    }
+    const hit = (score !== '' && !isNaN(score) && score >= targetScore);
+    const isMock = r.volumeType === '模拟卷';
+    const mockOptions = ['合工大超越', '李林', '李擂', '其他模拟卷'];
+    const mockSel = isMock
+      ? `<select class="mock-select" onchange="updateField(${dataIdx},'mockSource',this.value)">${mockOptions.map(o => `<option value="${o}" ${r.mockSource === o ? 'selected' : ''}>${o}</option>`).join('')}</select>`
+      : `<span style="color:var(--muted);font-size:12px;">—</span>`;
+    const ss = (label, field, v) => `<div class="ss-row"><span>${label}</span><input type="number" min="0" step="1" value="${v === '' || v == null ? '' : v}" onblur="updateField(${dataIdx},'${field}',this.value)" placeholder="0" /></div>`;
+    const errCount = (r.errors || []).length;
+
+    return `
+      <tr data-idx="${dataIdx}" class="${hit ? 'row-hit' : ''}">
+        <td class="col-num">${displayIdx}</td>
+        <td contenteditable="true" onblur="updateField(${dataIdx}, 'name', this.innerText.trim())">${escapeHTML(r.name)}</td>
+        <td contenteditable="true" onblur="updateField(${dataIdx}, 'date', this.innerText.trim())">${escapeHTML(r.date)}</td>
+        <td>
+          <select class="vol-select" onchange="onVolTypeChange(${dataIdx}, this.value)">
+            <option value="真题" ${!isMock ? 'selected' : ''}>真题</option>
+            <option value="模拟卷" ${isMock ? 'selected' : ''}>模拟卷</option>
+          </select>
+        </td>
+        <td>${mockSel}</td>
+        <td class="chk-center"><input type="checkbox" ${r.strictTime ? 'checked' : ''} onchange="updateField(${dataIdx},'strictTime',this.checked)" title="是否严格 3 小时限时模考" /></td>
+        <td class="col-score" contenteditable="true" onblur="updateField(${dataIdx}, 'score', this.innerText.trim())">${r.score === '' || r.score == null ? '' : r.score}</td>
+        <td class="col-target">${targetScore}</td>
+        <td class="col-diff ${diffClass}">${diffText}</td>
+        <td><div class="ss-wrap">${ss('选', 'selScore', r.selScore)}${ss('高', 'highScore', r.highScore)}${ss('线', 'lineScore', r.lineScore)}${ss('概', 'probScore', r.probScore)}</div></td>
+        <td class="chk-center"><button class="btn-icon" onclick="toggleErrors(${dataIdx})" title="展开 / 收起错题">📕 ${errCount}</button></td>
+        <td contenteditable="true" onblur="updateField(${dataIdx}, 'note', this.innerText.trim())">${escapeHTML(r.note)}</td>
+        <td>
+          <div class="actions">
+            <button class="btn-icon" onclick="deleteRow(${dataIdx})" title="删除">🗑</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  function errSubRow(r, i) {
+    const errs = r.errors || [];
+    const modOpts = ['高数', '线代', '概率'];
+    const typeOpts = ['计算失误', '知识点不会', '审题失误', '思路想不到'];
+    const items = errs.map(e => `
+      <div class="err-item" data-eid="${e.id}">
+        <input type="text" value="${escapeHTML(e.no)}" placeholder="题号" onblur="updateError(${i},'${e.id}','no',this.value)" />
+        <select onchange="updateError(${i},'${e.id}','module',this.value)">${modOpts.map(o => `<option value="${o}" ${e.module === o ? 'selected' : ''}>${o}</option>`).join('')}</select>
+        <select onchange="updateError(${i},'${e.id}','type',this.value)">${typeOpts.map(o => `<option value="${o}" ${e.type === o ? 'selected' : ''}>${o}</option>`).join('')}</select>
+        <textarea placeholder="笔记 / 错因 / 复盘" onblur="updateError(${i},'${e.id}','note',this.value)">${escapeHTML(e.note)}</textarea>
+        <button class="err-del" onclick="deleteError(${i},'${e.id}')" title="删除错题">✕</button>
+      </div>
+    `).join('');
+    return `<tr class="sub-row"><td colspan="13">
+      <div class="err-editor">
+        <div class="err-editor-head">📕 错题结构化记录（共 ${errs.length} 条）</div>
+        <div class="err-list">${items || '<div style="font-size:12px;color:var(--muted);">还没有错题，点下面按钮添加～</div>'}</div>
+        <button class="btn-icon err-add" onclick="addError(${i})">➕ 添加错题</button>
+      </div>
+    </td></tr>`;
+  }
+
+  function onVolTypeChange(idx, val) {
+    DATA[idx].volumeType = val;
+    if (val === '真题') DATA[idx].mockSource = '';
+    saveData(DATA);
+    render();
+  }
+
+  function toggleErrors(idx) {
+    if (expandedRows.has(idx)) expandedRows.delete(idx);
+    else expandedRows.add(idx);
+    render();
+  }
+
+  function addError(idx) {
+    if (!DATA[idx].errors) DATA[idx].errors = [];
+    DATA[idx].errors.push(normalizeError({ no: '', module: '高数', type: '计算失误', note: '' }));
+    saveData(DATA);
+    expandedRows.add(idx);
+    render();
+  }
+
+  function updateError(idx, eid, field, value) {
+    const e = DATA[idx].errors && DATA[idx].errors.find(x => x.id === eid);
+    if (!e) return;
+    e[field] = value;
+    saveData(DATA);
+    if (field === 'note') {
+      const btn = document.querySelector(`tr[data-idx="${idx}"] .chk-center .btn-icon`);
+      if (btn) btn.textContent = '📕 ' + (DATA[idx].errors || []).length;
+    }
+  }
+
+  function deleteError(idx, eid) {
+    DATA[idx].errors = (DATA[idx].errors || []).filter(x => x.id !== eid);
+    saveData(DATA);
+    render();
+  }
+
+  function escapeHTML(s) {
+    return (s ?? '').toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function updateField(idx, field, value) {
+    if (field === 'score') {
+      const prev = Number(DATA[idx][field]);
+      const n = parseFloat(value);
+      DATA[idx][field] = value === '' ? '' : (isNaN(n) ? value : n);
+      saveData(DATA);
+      render();
+      if (value !== '' && !isNaN(n)) {
+        const prevMet = !isNaN(prev) && prev >= targetScore;
+        const nowMet = n >= targetScore;
+        if (nowMet && !prevMet) { confetti(); }
+      }
+    } else if (field === 'strictTime') {
+      DATA[idx][field] = !!value;
+      saveData(DATA);
+    } else {
+      const numericFields = ['selScore', 'highScore', 'lineScore', 'probScore'];
+      if (numericFields.includes(field)) {
+        const n = parseFloat(value);
+        DATA[idx][field] = value === '' ? '' : (isNaN(n) ? value : n);
+      } else {
+        DATA[idx][field] = value;
+      }
+      saveData(DATA);
+      render();
+    }
+  }
+
+  function addRow() {
+    const today = new Date();
+    const fmt = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
+    DATA.push(normalizeRow({ name: '新套卷', date: fmt, score: '', note: '' }));
+    saveData(DATA);
+    render();
+    setTimeout(() => {
+      const rowsEls = Array.from(document.querySelectorAll('#tbody tr:not(.sub-row)'));
+      const last = rowsEls[rowsEls.length - 1];
+      if (last) {
+        last.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const cell = last.querySelector('td[contenteditable="true"]');
+        if (cell) cell.focus();
+      }
+    }, 60);
+    confetti();
+  }
+
+  function deleteRow(idx) {
+    if (!confirm('确定删除这一条记录吗？')) return;
+    DATA.splice(idx, 1);
+    saveData(DATA);
+    render();
+  }
+
+  function seedData(force) {
+    if (!force && DATA.length > 0 && !confirm('这会覆盖现有数据，确定吗？')) return;
+    DATA = defaultSeed().map(normalizeRow);
+    saveData(DATA);
+    render();
+  }
+
+  function groupStats(rows) {
+    const counted = rows.filter(r => r.score !== '' && !isNaN(Number(r.score))).map(r => Number(r.score));
+    const n = counted.length;
+    if (n === 0) return { n: 0, avg: '—', std: '—', max: '—', maxName: '' };
+    const avg = counted.reduce((a, b) => a + b, 0) / n;
+    const max = Math.max(...counted);
+    const maxRow = rows.find(r => Number(r.score) === max);
+    const variance = counted.reduce((a, b) => a + (b - avg) ** 2, 0) / n;
+    const std = Math.sqrt(variance);
+    return { n, avg: avg.toFixed(1), std: std.toFixed(1), max, maxName: maxRow ? maxRow.name : '' };
+  }
+  function renderStats() {
+    const zhen = DATA.filter(r => r.volumeType !== '模拟卷');
+    const mo = DATA.filter(r => r.volumeType === '模拟卷');
+    const z = groupStats(zhen), m = groupStats(mo);
+    const rateOf = (rows, s) => s.n ? Math.round(rows.filter(r => Number(r.score) >= targetScore).length / s.n * 100) : 0;
+    const zRate = rateOf(zhen, z), mRate = rateOf(mo, m);
+    const block = (title, s, rate) => `
+      <div class="stat-block">
+        <div class="stat-block-head">${title}</div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">📝 套数</div><div class="stat-value">${s.n}</div></div>
+          <div class="stat-card"><div class="stat-label">📊 平均分</div><div class="stat-value">${s.avg}</div></div>
+          <div class="stat-card"><div class="stat-label">📐 标准差</div><div class="stat-value">${s.std}</div><div class="stat-sub">越小越稳</div></div>
+          <div class="stat-card"><div class="stat-label">🏆 最高分</div><div class="stat-value">${s.max}</div><div class="stat-sub">${escapeHTML(s.maxName)}</div></div>
+          <div class="stat-card"><div class="stat-label">🎯 达标率</div><div class="stat-value">${rate}%</div><div class="stat-sub">≥ ${targetScore} 分</div></div>
+        </div>
+      </div>`;
+    document.getElementById('stats').innerHTML = block('📘 真题', z, zRate) + block('📗 模拟卷', m, mRate);
+  }
+
+  const STORAGE_KEY_BACKUP = 'kaoyan-grades-backup-v1';
+  const STORAGE_KEY_BACKUP_DATA = 'kaoyan-grades-autosave-v1';
+  function markBackup() {
+    try { localStorage.setItem(STORAGE_KEY_BACKUP, String(Date.now())); } catch (e) {}
+    checkBackupReminder();
+  }
+
+  function exportJSON() {
+    markBackup();
+    const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kaoyan-grades-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (!Array.isArray(parsed)) throw new Error('格式不正确');
+        DATA = parsed.map(normalizeRow);
+        saveData(DATA);
+        render();
+        alert(`✅ 已导入 ${parsed.length} 条记录`);
+      } catch (err) {
+        alert('❌ 导入失败：文件不是有效的成绩 JSON\n' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    input.value = ''; // 允许重复导入同一文件
+  }
+
+  // 简易 CSV 解析（支持引号转义与字段内逗号/换行）
+  function parseCSV(text) {
+    const rows = []; let row = [], field = '', i = 0, inQ = false;
+    text = text.replace(/^\uFEFF/, '');
+    while (i < text.length) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"' && text[i + 1] === '"') { field += '"'; i += 2; }
+        else if (c === '"') { inQ = false; i++; }
+        else { field += c; i++; }
+      } else {
+        if (c === '"') { inQ = true; i++; }
+        else if (c === ',') { row.push(field); field = ''; i++; }
+        else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; i++; }
+        else if (c === '\r') { i++; }
+        else { field += c; i++; }
+      }
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(r => r.length && !(r.length === 1 && r[0] === ''));
+  }
+
+  function importCSV(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const rows = parseCSV(e.target.result);
+        if (rows.length < 2) throw new Error('没有数据行');
+        const header = rows[0].map(h => h.trim());
+        const idx = (name) => header.indexOf(name);
+        const iName = idx('套卷名称'), iDate = idx('考试日期'), iVol = idx('卷标签'),
+              iMock = idx('模拟卷来源'), iStrict = idx('严格限时'), iScore = idx('分数'),
+              iSel = idx('选填得分'), iHigh = idx('高数得分'), iLine = idx('线代得分'),
+              iProb = idx('概率得分'), iNote = idx('错题笔记'), iErr = idx('错题数');
+        const out = [];
+        for (let k = 1; k < rows.length; k++) {
+          const r = rows[k];
+          const get = (j) => (j >= 0 && r[j] != null ? r[j].trim() : '');
+          const toNum = (v) => { const n = parseFloat(v); return isNaN(n) ? '' : n; };
+          const errN = parseInt(get(iErr), 10);
+          out.push(normalizeRow({
+            name: get(iName), date: get(iDate),
+            volumeType: get(iVol) === '模拟卷' ? '模拟卷' : '真题',
+            mockSource: get(iMock),
+            strictTime: /是|true|1/i.test(get(iStrict)),
+            score: toNum(get(iScore)),
+            selScore: toNum(get(iSel)), highScore: toNum(get(iHigh)),
+            lineScore: toNum(get(iLine)), probScore: toNum(get(iProb)),
+            note: get(iNote),
+            errors: isNaN(errN) ? [] : Array.from({ length: errN }, () => normalizeError({}))
+          }));
+        }
+        if (out.length === 0) throw new Error('未解析到有效记录');
+        if (DATA.length > 0 && !confirm(`将导入 ${out.length} 条记录并覆盖现有数据，确定吗？`)) { input.value = ''; return; }
+        DATA = out;
+        saveData(DATA);
+        render();
+        alert(`✅ 已导入 ${out.length} 条记录`);
+      } catch (err) {
+        alert('❌ CSV 导入失败：' + err.message);
+      }
+      input.value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  function exportCSV() {
+    markBackup();
+    const headers = ['套卷名称', '考试日期', '卷标签', '模拟卷来源', '严格限时', '分数', '目标分', '差距', '选填得分', '高数得分', '线代得分', '概率得分', '错题数', '错题笔记'];
+    const escape = (v) => `"${(v ?? '').toString().replace(/"/g, '""')}"`;
+    const rows = DATA.map(r => {
+      const score = r.score === '' || r.score == null ? '' : Number(r.score);
+      const diff = isNaN(score) ? '' : (score - targetScore);
+      const errN = (r.errors || []).length;
+      return [r.name, r.date, r.volumeType, r.mockSource || '', r.strictTime ? '是' : '否', r.score, targetScore, diff, r.selScore, r.highScore, r.lineScore, r.probScore, errN, r.note].map(escape).join(',');
+    });
+    const csv = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kaoyan-grades-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ===== 趣味功能：一键换肤 / 撒花庆祝 / 进步趋势图 =====
+  const THEME_KEY = 'theme-' + (location.pathname.split('/').pop() || 'default');
+  function setTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+    const sel = document.getElementById('theme-select');
+    if (sel) sel.value = t;
+    renderChart();
+  }
+  function applyTheme() {
+    let t = 'light';
+    try { t = localStorage.getItem(THEME_KEY) || 'light'; } catch (e) {}
+    document.documentElement.setAttribute('data-theme', t);
+    const sel = document.getElementById('theme-select');
+    if (sel) sel.value = t;
+  }
+  function confetti() {
+    const colors = ['#2f6fed', '#16a34a', '#f59e0b', '#e0452f', '#a855f7', '#06b6d4'];
+    for (let i = 0; i < 90; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left = (Math.random() * 96) + 'vw';
+      p.style.background = colors[i % colors.length];
+      p.style.animationDelay = (Math.random() * 0.4) + 's';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2300);
+    }
+  }
+  function renderAnalysis() {
+    const scores = DATA.filter(r => r.score !== '' && !isNaN(Number(r.score))).map(r => Number(r.score));
+    const n = scores.length;
+    const el = (id) => document.getElementById(id);
+    if (n === 0) {
+      ['m-rate','m-min','m-median','m-std','m-full','m-prog'].forEach(id => { const x = el(id); if (x) x.textContent = '—'; });
+      const bar = el('m-rate-bar'); if (bar) bar.style.width = '0';
+      const sub = el('m-rate-sub'); if (sub) sub.textContent = '';
+      drawDist([]);
+      return;
+    }
+    const avg = scores.reduce((a, b) => a + b, 0) / n;
+    const min = Math.min(...scores);
+    const sorted = [...scores].sort((a, b) => a - b);
+    const median = n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+    const variance = scores.reduce((a, b) => a + (b - avg) ** 2, 0) / n;
+    const std = Math.sqrt(variance);
+    const full = scores.filter(s => s === 150).length;
+    const met = scores.filter(s => s >= targetScore).length;
+    const rate = Math.round(met / n * 100);
+    const first = scores[0];
+    const last = scores[n - 1];
+    const prog = last - first;
+
+    const rateEl = el('m-rate');
+    rateEl.textContent = rate + '%';
+    rateEl.className = 'm-value ' + (rate >= 100 ? 'positive' : (rate === 0 ? 'negative' : ''));
+    const bar = el('m-rate-bar'); if (bar) bar.style.width = rate + '%';
+    const rateSub = el('m-rate-sub');
+    if (rateSub) rateSub.textContent = rate >= 100 ? '全部达标，稳！🎉' : (rate === 0 ? '还没一套达到目标，加油' : '还差 ' + (n - met) + ' 套达标');
+
+    el('m-min').textContent = min;
+    el('m-median').textContent = (Number.isInteger(median) ? median : median.toFixed(1));
+    const stdEl = el('m-std');
+    stdEl.textContent = std.toFixed(1);
+    stdEl.className = 'm-value ' + (std <= 8 ? 'positive' : (std > 15 ? 'negative' : ''));
+    el('m-full').textContent = full + ' 次';
+    const progEl = el('m-prog');
+    progEl.textContent = (prog > 0 ? '+' : '') + prog;
+    progEl.className = 'm-value ' + (prog > 0 ? 'positive' : (prog < 0 ? 'negative' : ''));
+    drawDist(scores);
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    if (h < r) r = h;
+    if (w < 2 * r) r = w / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, 0);
+    ctx.arcTo(x, y + h, x, y, 0);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function drawDist(scores) {
+    const canvas = document.getElementById('dist-chart');
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || (canvas.parentElement.clientWidth - 32);
+    const cssH = 184;
+    canvas.width = Math.max(1, Math.round(cssW * dpr));
+    canvas.height = cssH * dpr;
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    const cs = getComputedStyle(document.body);
+    const c = (name, def) => (cs.getPropertyValue(name).trim() || def);
+    const cText = c('--text', '#1f2329'), cMuted = c('--muted', '#646a73'), cPrimary = c('--primary', '#2f6fed');
+    const buckets = [
+      { label: '<110', test: s => s < 110 },
+      { label: '110-119', test: s => s >= 110 && s < 120 },
+      { label: '120-129', test: s => s >= 120 && s < 130 },
+      { label: '130-139', test: s => s >= 130 && s < 140 },
+      { label: '140-150', test: s => s >= 140 },
+    ];
+    const counts = buckets.map(b => scores.filter(b.test).length);
+    if (scores.length === 0) {
+      ctx.fillStyle = cMuted; ctx.font = '13px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('填写分数后这里会显示分数段分布 📊', cssW / 2, cssH / 2);
+      ctx.textAlign = 'start'; return;
+    }
+    const maxC = Math.max(1, ...counts);
+    const padL = 10, padR = 10, padT = 20, padB = 26;
+    const W = cssW - padL - padR, H = cssH - padT - padB;
+    const bw = W / buckets.length;
+    const gap = bw * 0.24;
+    buckets.forEach((b, i) => {
+      const cnt = counts[i];
+      const x = padL + i * bw + gap / 2;
+      const w = bw - gap;
+      const h = Math.max(cnt / maxC * H, cnt > 0 ? 2 : 0);
+      const y = padT + H - h;
+      ctx.fillStyle = cPrimary;
+      ctx.globalAlpha = 0.2;
+      roundRect(ctx, x, y, w, h, 4); ctx.fill();
+      ctx.globalAlpha = 1;
+      if (cnt > 0) ctx.fillRect(x, y, w, Math.min(h, 4));
+      ctx.fillStyle = cText; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+      if (cnt > 0) ctx.fillText(String(cnt), x + w / 2, y - 5);
+      ctx.fillStyle = cMuted; ctx.font = '11px sans-serif';
+      ctx.fillText(b.label, x + w / 2, cssH - 8);
+    });
+    ctx.textAlign = 'start';
+  }
+
+  // ===== 新增：目标达成预测 + 防丢备份/报告 =====
+  function getDaysLeft() {
+    const d = getExamDate();
+    const target = new Date(d + 'T08:30:00');
+    return Math.max(0, Math.ceil((target - new Date()) / 86400000));
+  }
+  function computeForecast(rows, daysLeft) {
+    const scored = rows.filter(r => r.score !== '' && !isNaN(Number(r.score)));
+    if (scored.length < 3) return null;
+    const N = Math.min(8, scored.length);
+    const recent = scored.slice(-N);
+    const n = recent.length;
+    const xs = recent.map((_, i) => i), ys = recent.map(r => Number(r.score));
+    const mx = xs.reduce((a, b) => a + b, 0) / n, my = ys.reduce((a, b) => a + b, 0) / n;
+    let num = 0, den = 0;
+    for (let i = 0; i < n; i++) { num += (xs[i] - mx) * (ys[i] - my); den += (xs[i] - mx) ** 2; }
+    const slope = den === 0 ? 0 : num / den;
+    const dates = recent.map(r => r.date).filter(Boolean).sort();
+    let tpd = 0;
+    if (dates.length >= 2) { const span = (new Date(dates[dates.length - 1]) - new Date(dates[0])) / 86400000; tpd = span > 0 ? (dates.length - 1) / span : 0; }
+    if (tpd <= 0) tpd = 0.2;
+    const future = daysLeft > 0 ? Math.max(1, Math.round(daysLeft * tpd)) : 3;
+    const futureSteps = Math.max(2, Math.min(10, future));
+    const lastScore = Number(ys[ys.length - 1]);
+    const predicted = Math.round(lastScore + slope * futureSteps);
+    const need = slope > 0 ? Math.ceil((targetScore - lastScore) / slope) : Infinity;
+    return { n, my: Math.round(my * 10) / 10, slope: Math.round(slope * 100) / 100, lastScore, predicted, need, futureSteps };
+  }
+  function restoreBackup() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_BACKUP_DATA);
+      if (!raw) { alert('没有找到自动备份（自动备份会在每次保存时生成）'); return; }
+      if (!confirm('将用自动备份覆盖当前数据，确定继续？')) return;
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) { alert('备份数据损坏'); return; }
+      DATA = parsed.map(normalizeRow);
+      saveData(DATA); render();
+      alert(`✅ 已从自动备份恢复 ${parsed.length} 条记录`);
+    } catch (e) { alert('恢复失败：' + e.message); }
+  }
+  function exportReport() {
+    const grab = id => { const cv = document.getElementById(id); try { return cv ? cv.toDataURL('image/png') : ''; } catch (e) { return ''; } };
+    const imgs = { chart: grab('chart'), dist: grab('dist-chart'), radar: grab('radar-chart') };
+    const today = new Date().toISOString().slice(0, 10);
+    const rowsHtml = DATA.map((r, i) => {
+      const sc = (r.score === '' || r.score == null || isNaN(Number(r.score))) ? '—' : Number(r.score);
+      const diff = sc === '—' ? '—' : (sc - targetScore >= 0 ? '+' : '') + (sc - targetScore);
+      return `<tr><td>${i + 1}</td><td>${escapeHTML(r.name)}</td><td>${escapeHTML(r.date || '')}</td><td>${escapeHTML(r.volumeType)}</td><td>${sc}</td><td>${targetScore}</td><td>${diff}</td><td>${r.highScore ?? ''}</td><td>${r.lineScore ?? ''}</td><td>${r.probScore ?? ''}</td></tr>`;
+    }).join('');
+    const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>数学一成绩报告 ${today}</title>
+<style>
+ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#1f2329;margin:32px;max-width:900px;}
+ h1{font-size:22px;margin-bottom:4px;} .meta{color:#646a73;font-size:13px;margin-bottom:18px;}
+ .charts{display:flex;flex-wrap:wrap;gap:16px;margin:18px 0;} .charts figure{margin:0;border:1px solid #e5e7eb;border-radius:10px;padding:10px;background:#fff;} figure figcaption{font-size:12px;color:#646a73;text-align:center;margin-top:6px;}
+ table{border-collapse:collapse;width:100%;font-size:12px;margin-top:14px;} th,td{border:1px solid #e5e7eb;padding:6px 8px;text-align:center;} th{background:#f3f6fb;}
+ @media print{body{margin:12mm;}}
+</style></head><body>
+<h1>📚 数学一成绩报告</h1>
+<div class="meta">生成日期：${today} · 目标分：${targetScore} · 共 ${DATA.length} 套（真题 ${DATA.filter(r => r.volumeType !== '模拟卷').length} / 模拟卷 ${DATA.filter(r => r.volumeType === '模拟卷').length}）</div>
+<div class="charts">
+ ${imgs.chart ? `<figure><img src="${imgs.chart}" style="width:440px;max-width:100%;"><figcaption>分数进步趋势</figcaption></figure>` : ''}
+ ${imgs.dist ? `<figure><img src="${imgs.dist}" style="width:360px;max-width:100%;"><figcaption>分数段分布</figcaption></figure>` : ''}
+ ${imgs.radar ? `<figure><img src="${imgs.radar}" style="width:300px;max-width:100%;"><figcaption>模块强弱雷达</figcaption></figure>` : ''}
+</div>
+<table><thead><tr><th>#</th><th>套卷</th><th>日期</th><th>类型</th><th>分数</th><th>目标</th><th>差距</th><th>高数</th><th>线代</th><th>概率</th></tr></thead><tbody>${rowsHtml}</tbody></table>
+</body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `数学一成绩报告-${today}.html`; a.click();
+    URL.revokeObjectURL(url);
+    markBackup();
+  }
+
+  function renderChart() {
+    const canvas = document.getElementById('chart');
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || (canvas.parentElement.clientWidth - 32);
+    const cssH = 200;
+    canvas.width = Math.max(1, Math.round(cssW * dpr));
+    canvas.height = cssH * dpr;
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    const cs = getComputedStyle(document.body);
+    const c = (n, d) => (cs.getPropertyValue(n).trim() || d);
+    const cText = c('--text', '#1f2329'), cMuted = c('--muted', '#646a73');
+    const cBorder = c('--border', '#e5e7eb'), cPrimary = c('--primary', '#2f6fed');
+    const cDanger = c('--danger', '#d93025'), cSuccess = c('--success', '#16a34a');
+    const cWarning = c('--warning', '#f59e0b');
+    const padL = 42, padR = 14, padT = 14, padB = 26;
+    const W = cssW - padL - padR, H = cssH - padT - padB;
+    const maxY = 150, minY = 0;
+    const yOf = v => padT + H - (v - minY) / (maxY - minY) * H;
+    ctx.strokeStyle = cBorder; ctx.fillStyle = cMuted; ctx.font = '11px sans-serif'; ctx.lineWidth = 1;
+    for (let v = 0; v <= 150; v += 30) {
+      const y = yOf(v);
+      ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + W, y); ctx.stroke();
+      ctx.fillText(String(v), 10, y + 4);
+    }
+    // 目标线 + 达成进度生长动画（仅目标分/排序变化时触发）
+    const tKey = trendSort + '|' + targetScore;
+    if (tKey !== chartTargetAnim.key) { chartTargetAnim.key = tKey; chartTargetAnim.start = performance.now(); chartTargetAnim.active = true; }
+    if (targetScore > 0 && targetScore <= 150) {
+      const tyFinal = yOf(targetScore);
+      const baseY = padT + H;                                   // 0 分基线
+      const tv = chartTargetAnim.active ? Math.min(1, (performance.now() - chartTargetAnim.start) / TARGET_ANIM_DUR) : 1;
+      const te = 1 - Math.pow(1 - tv, 3);                       // easeOutCubic
+      const ty = baseY - te * (baseY - tyFinal);                // 从底部“长”到目标高度
+      ctx.save();
+      ctx.strokeStyle = cDanger; ctx.setLineDash([6, 4]); ctx.lineWidth = 1.5;
+      ctx.globalAlpha = 0.35 + 0.65 * te;
+      ctx.beginPath(); ctx.moveTo(padL, ty); ctx.lineTo(padL + W * te, ty); ctx.stroke();
+      ctx.restore();
+      if (te > 0.55) {                                          // 标签淡入
+        ctx.save();
+        ctx.globalAlpha = Math.min(1, (te - 0.55) / 0.45);
+        ctx.fillStyle = cDanger; ctx.font = '10px sans-serif';
+        ctx.fillText('🎯 目标 ' + targetScore, padL + 4, Math.max(padT + 8, tyFinal - 6));
+        ctx.restore();
+      }
+    }
+    // 驱动动画帧（幂等，避免重复循环）
+    if (chartTargetAnim.active) {
+      const tv = Math.min(1, (performance.now() - chartTargetAnim.start) / TARGET_ANIM_DUR);
+      if (tv < 1) {
+        if (!chartTargetAnim.rafPending) {
+          chartTargetAnim.rafPending = true;
+          requestAnimationFrame(() => { chartTargetAnim.rafPending = false; renderChart(); });
+        }
+      } else {
+        chartTargetAnim.active = false;
+      }
+    }
+    let rows = DATA.filter(r => r.score !== '' && !isNaN(Number(r.score)))
+                     .map(r => ({ name: r.name, date: r.date, score: Number(r.score) }));
+    if (trendSort === 'date') rows.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    if (rows.length === 0) {
+      ctx.fillStyle = cMuted; ctx.font = '13px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('填写分数后这里会画出进步趋势线 📈', cssW / 2, cssH / 2);
+      ctx.textAlign = 'start'; return;
+    }
+    const xOf = i => padL + (rows.length === 1 ? W / 2 : i * W / (rows.length - 1));
+    ctx.strokeStyle = cPrimary; ctx.lineWidth = 2.5; ctx.beginPath();
+    rows.forEach((r, i) => { const x = xOf(i), y = yOf(r.score); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.stroke();
+    rows.forEach((r, i) => {
+      const x = xOf(i), y = yOf(r.score);
+      const above = r.score >= targetScore;
+      ctx.fillStyle = above ? cDanger : cSuccess;
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = cText; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(String(r.score), x, y - 9);
+      ctx.fillStyle = cMuted; ctx.fillText('#' + (i + 1), x, cssH - 10);
+    });
+    // 近 5 套移动平均线（虚线）
+    if (rows.length >= 2) {
+      const ma = rows.map((_, i) => {
+        const win = rows.slice(Math.max(0, i - 4), i + 1).map(r => r.score);
+        return win.reduce((a, b) => a + b, 0) / win.length;
+      });
+      ctx.strokeStyle = cWarning; ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.beginPath();
+      ma.forEach((v, i) => { const x = xOf(i), y = yOf(v); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    // 目标达成预测：延伸线 + 面板
+    const fc = computeForecast(rows, getDaysLeft());
+    const fp = document.getElementById('forecast');
+    if (!fc) {
+      if (fp) fp.style.display = 'none';
+    } else {
+      const lastI = rows.length - 1;
+      const lx = xOf(lastI), ly = yOf(rows[lastI].score);
+      const ex = Math.min(padL + W, xOf(lastI + fc.futureSteps));
+      const ey = yOf(Math.max(0, Math.min(150, rows[lastI].score + fc.slope * fc.futureSteps)));
+      ctx.save();
+      ctx.strokeStyle = cPrimary; ctx.setLineDash([3, 3]); ctx.globalAlpha = 0.7; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(ex, ey); ctx.stroke();
+      ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.fillStyle = cPrimary;
+      ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = cText; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('🔮 ' + fc.predicted, ex, ey - 9);
+      ctx.restore();
+      if (fp) {
+        fp.style.display = 'flex';
+        const status = fc.predicted >= targetScore ? '🎉 按当前节奏有望达标！' : `距目标还差 ${targetScore - fc.predicted} 分`;
+        const needTxt = fc.slope > 0 && isFinite(fc.need) ? `按当前斜率还需约 <b>${fc.need}</b> 套达标` : (fc.slope <= 0 ? '⚠️ 近期趋势持平/下滑，注意调整节奏' : '');
+        fp.innerHTML = `<span>🔮 近 <b>${fc.n}</b> 套均分 <b>${fc.my}</b>，斜率 <b>${fc.slope >= 0 ? '+' : ''}${fc.slope}</b> 分/套</span>`
+          + `<span>考前（约 ${fc.futureSteps} 套后）预计 <b>${fc.predicted}</b> 分 · ${status}</span>`
+          + (needTxt ? `<span>${needTxt}</span>` : '');
+      }
+    }
+    ctx.textAlign = 'start';
+  }
+
+  // ===== 新增：雷达图 / PNG 下载 =====
+  function drawRadar() {
+    const canvas = document.getElementById('radar-chart');
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = canvas.clientWidth || (canvas.parentElement.clientWidth - 32);
+    const cssH = 240;
+    canvas.width = Math.max(1, Math.round(cssW * dpr));
+    canvas.height = cssH * dpr;
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    const cs = getComputedStyle(document.body);
+    const c = (n, d) => (cs.getPropertyValue(n).trim() || d);
+    const cText = c('--text', '#1f2329'), cMuted = c('--muted', '#646a73');
+    const cPrimary = c('--primary', '#2f6fed'), cBorder = c('--border', '#e5e7eb');
+    const axes = ['高数', '线代', '概率'];
+    const fields = ['highScore', 'lineScore', 'probScore'];
+    const rows = DATA.filter(r => fields.some(f => r[f] !== '' && !isNaN(Number(r[f]))));
+    const cx = cssW / 2, cy = cssH / 2 + 2, R = Math.min(cssW, cssH) / 2 - 36;
+    if (rows.length === 0) {
+      ctx.fillStyle = cMuted; ctx.font = '13px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('填写「分项得分」后展示模块强弱雷达 🕸️', cx, cy); ctx.textAlign = 'start'; return;
+    }
+    const totals = fields.map(f => rows.reduce((a, r) => a + (r[f] === '' || isNaN(Number(r[f])) ? 0 : Number(r[f])), 0));
+    const perMax = fields.map(f => Math.max(1, ...rows.map(r => (r[f] === '' || isNaN(Number(r[f]))) ? 0 : Number(r[f]))));
+    const avgs = totals.map((t, k) => t / rows.length);
+    // 网格
+    for (let g = 1; g <= 4; g++) {
+      const rr = R * g / 4;
+      ctx.beginPath();
+      axes.forEach((_, k) => { const ang = -Math.PI / 2 + k * 2 * Math.PI / 3; const x = cx + rr * Math.cos(ang), y = cy + rr * Math.sin(ang); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      ctx.closePath(); ctx.strokeStyle = cBorder; ctx.lineWidth = 1; ctx.stroke();
+    }
+    // 轴线 + 标签
+    axes.forEach((ax, k) => {
+      const ang = -Math.PI / 2 + k * 2 * Math.PI / 3;
+      const x = cx + R * Math.cos(ang), y = cy + R * Math.sin(ang);
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.strokeStyle = cBorder; ctx.lineWidth = 1; ctx.stroke();
+      const lx = cx + (R + 16) * Math.cos(ang), ly = cy + (R + 16) * Math.sin(ang);
+      ctx.fillStyle = cText; ctx.font = '13px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(`${ax} ${avgs[k].toFixed(0)}`, lx, ly);
+    });
+    ctx.textBaseline = 'alphabetic';
+    // 数据多边形（按各模块自身峰值归一化，便于比较强弱）
+    ctx.beginPath();
+    avgs.forEach((v, k) => { const ang = -Math.PI / 2 + k * 2 * Math.PI / 3; const rr = R * Math.min(1, v / perMax[k]); const x = cx + rr * Math.cos(ang), y = cy + rr * Math.sin(ang); k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.closePath(); ctx.fillStyle = cPrimary; ctx.globalAlpha = 0.25; ctx.fill(); ctx.globalAlpha = 1;
+    ctx.strokeStyle = cPrimary; ctx.lineWidth = 2; ctx.stroke();
+    ctx.textAlign = 'start';
+  }
+
+  function downloadCanvas(id, name) {
+    const canvas = document.getElementById(id);
+    if (!canvas) return;
+    try {
+      const url = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = url; a.download = `${name}-${new Date().toISOString().slice(0, 10)}.png`;
+      a.click();
+    } catch (e) { alert('下载失败：' + e.message); }
+  }
+
+  // ===== 新增：备份提醒 =====
+  function checkBackupReminder() {
+    const el = document.getElementById('backup-banner');
+    if (!el) return;
+    let last = null;
+    try { last = parseInt(localStorage.getItem(STORAGE_KEY_BACKUP) || '0', 10) || null; } catch (e) {}
+    const days = last ? Math.floor((Date.now() - last) / 86400000) : 999;
+    if (days >= 14) {
+      el.style.display = 'flex';
+      const t = last ? `（上次备份 ${days} 天前）` : '（还没备份过）';
+      const txt = el.querySelector('.bk-text');
+      if (txt) txt.textContent = `💡 温柔提醒：距离上次导出备份已超过 14 天 ${t}，数据只存在本浏览器，记得「导出 JSON」备份一下哦～`;
+    } else {
+      el.style.display = 'none';
+    }
+  }
+
+  // ===== 新增：考研倒计时 =====
+  const STORAGE_KEY_EXAM = 'kaoyan-exam-date-v1';
+  function getExamDate() { try { return localStorage.getItem(STORAGE_KEY_EXAM) || '2026-12-26'; } catch (e) { return '2026-12-26'; } }
+  function setExamDate(d) { try { localStorage.setItem(STORAGE_KEY_EXAM, d); } catch (e) {} updateCountdown(); }
+  function updateCountdown() {
+    const d = getExamDate();
+    const el = document.getElementById('countdown-num'); if (!el) return;
+    const ed = document.getElementById('exam-date'); if (ed && !ed.value) ed.value = d;
+    const target = new Date(d + 'T08:30:00');
+    const now = new Date();
+    const days = Math.ceil((target - now) / 86400000);
+    el.textContent = (days >= 0 ? days : 0) + ' 天';
+    const sub = document.getElementById('countdown-sub');
+    if (sub) sub.textContent = `考研日期：${d}` + (days < 0 ? '（已过去）' : '');
+  }
+
+  // ===== 新增：数学模考计时器（3 小时）=====
+  const timerState = { total: 3 * 3600, remaining: 3 * 3600, running: false, interval: null };
+  function fmtTime(s) { const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60; return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`; }
+  function updateTimerDisplay() {
+    const d = document.getElementById('timer-display'); if (d) d.textContent = fmtTime(timerState.remaining);
+    const st = document.getElementById('timer-status'); if (st) st.textContent = timerState.running ? '⏱ 模考进行中…' : (timerState.remaining < timerState.total ? '⏸ 已暂停' : '⏸ 待开始');
+  }
+  function timerTick() {
+    if (timerState.remaining > 0) {
+      timerState.remaining--; updateTimerDisplay();
+      if (timerState.remaining === 0) {
+        timerState.running = false; clearInterval(timerState.interval); timerState.interval = null;
+        updateTimerDisplay(); confetti(); alert('🎉 3 小时模考结束！辛苦了，小向！');
+      }
+    }
+  }
+  function startTimer() {
+    if (timerState.running) return;
+    if (timerState.remaining <= 0) timerState.remaining = timerState.total;
+    timerState.running = true; timerState.interval = setInterval(timerTick, 1000); updateTimerDisplay();
+  }
+  function pauseTimer() { timerState.running = false; if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } updateTimerDisplay(); }
+  function resetTimer() { pauseTimer(); timerState.remaining = timerState.total; updateTimerDisplay(); }
+
+  // ===== 新增：数一真题刷卷清单 =====
+  const CHECKLIST_YEARS = (() => { const a = []; for (let y = 2000; y <= 2026; y++) a.push(y); return a; })();
+  const STORAGE_KEY_CHECKLIST = 'kaoyan-checklist-v1';
+  function loadChecklist() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY_CHECKLIST) || '{}'); } catch (e) { return {}; } }
+  function saveChecklist(o) { try { localStorage.setItem(STORAGE_KEY_CHECKLIST, JSON.stringify(o)); } catch (e) {} }
+  let checklistState = loadChecklist();
+  const CL_STATES = ['todo', 'done', 'reserved'];
+  const CL_LABEL = { todo: '未做', done: '已完成', reserved: '预留未刷' };
+  function renderChecklist() {
+    const wrap = document.getElementById('checklist-wrap'); if (!wrap) return;
+    wrap.innerHTML = CHECKLIST_YEARS.map(y => {
+      const st = checklistState[y] || 'todo';
+      const hint = (y >= 2023 && y <= 2026) ? ' reserved-hint' : '';
+      return `<div class="check-item" onclick="cycleCheck(${y})">
+        <div class="check-year${hint}">${y}</div>
+        <div class="check-pill pill-${st}">${CL_LABEL[st]}</div>
+      </div>`;
+    }).join('');
+    const counts = { todo: 0, done: 0, reserved: 0 };
+    CHECKLIST_YEARS.forEach(y => counts[checklistState[y] || 'todo']++);
+    const sum = document.getElementById('checklist-summary');
+    if (sum) sum.textContent = `已完成 ${counts.done} · 预留未刷 ${counts.reserved} · 未做 ${counts.todo}`;
+  }
+  function cycleCheck(y) {
+    const cur = checklistState[y] || 'todo';
+    const next = CL_STATES[(CL_STATES.indexOf(cur) + 1) % CL_STATES.length];
+    if (next === 'todo') delete checklistState[y]; else checklistState[y] = next;
+    saveChecklist(checklistState);
+    renderChecklist();
+  }
+
+  // ===== 新增：Ctrl/⌘ + N 新增一条 =====
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'n' || e.key === 'N')) {
+      e.preventDefault();
+      addRow();
+    }
+  });
+
+  // 初始化
+  applyTheme();
+  updateCountdown();
+  renderChecklist();
+  updateTimerDisplay();
+  checkBackupReminder();
+  window.addEventListener('resize', () => { clearTimeout(window.__rt || 0); window.__rt = setTimeout(() => { renderChart(); drawRadar(); renderAnalysis(); }, 150); });
+  render();
+</script>
+
+</body>
+</html>
