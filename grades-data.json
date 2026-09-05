@@ -171,7 +171,7 @@
       "score": 145,
       "note": "",
       "volumeType": "模拟卷",
-      "mockSource": "其他模拟卷",
+      "mockSource": "张宇",
       "strictTime": false,
       "selScore": "",
       "highScore": "",
@@ -976,5 +976,5 @@
     "2021": "done",
     "2022": "done"
   },
-  "updatedAt": "2026-09-05T09:22:18.849Z"
+  "updatedAt": "2026-09-05T09:22:26.039Z"
 }
