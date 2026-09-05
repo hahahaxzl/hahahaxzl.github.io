@@ -826,8 +826,11 @@
       "errors": []
     }
   ],
-  "target": 140,
+  "target": {
+    "zhen": 140,
+    "mock": 140
+  },
   "exam": "2026-12-26",
   "checklist": {},
-  "updatedAt": "2026-09-05T09:43:10.465Z"
+  "updatedAt": "2026-09-05T09:43:24.150Z"
 }
