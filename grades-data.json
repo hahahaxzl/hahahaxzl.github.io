@@ -186,7 +186,7 @@
       "name": "张宇八套卷卷二",
       "date": "2026/09/05",
       "score": 145,
-      "note": "",
+      "note": "完成时间：160min",
       "volumeType": "模拟卷",
       "mockSource": "其他模拟卷",
       "strictTime": false,
@@ -212,5 +212,5 @@
     "2021": "done",
     "2022": "done"
   },
-  "updatedAt": "2026-09-05T03:55:34.885Z"
+  "updatedAt": "2026-09-05T03:55:45.701Z"
 }
