@@ -12,6 +12,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 0,
       "errors": []
     },
     {
@@ -26,6 +27,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 0,
       "errors": []
     },
     {
@@ -40,6 +42,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 0,
       "errors": []
     },
     {
@@ -54,6 +57,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 0,
       "errors": []
     },
     {
@@ -68,132 +72,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "2017 数学一真题",
-      "date": "2026/08/28",
-      "score": 145,
-      "note": "完成时间：90min",
-      "volumeType": "真题",
-      "mockSource": "",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "2018 数学一",
-      "date": "2026/08/29",
-      "score": 135,
-      "note": "",
-      "volumeType": "真题",
-      "mockSource": "",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "2019数学一",
-      "date": "2026/08/30",
-      "score": 145,
-      "note": "完成时间：2 小时 2min",
-      "volumeType": "真题",
-      "mockSource": "",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "2020 数学一",
-      "date": "2026/08/31",
-      "score": 142,
-      "note": "完成时间：1 小时 52min",
-      "volumeType": "真题",
-      "mockSource": "",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "2021 数学一",
-      "date": "2026/09/01",
-      "score": 150,
-      "note": "完成时间：102min",
-      "volumeType": "真题",
-      "mockSource": "",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": 0,
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "2022 数学一",
-      "date": "2026/09/02",
-      "score": 142,
-      "note": "完成时间 108min",
-      "volumeType": "真题",
-      "mockSource": "",
-      "strictTime": false,
-      "selScore": 0,
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "张宇八套卷卷一",
-      "date": "2026/09/03",
-      "score": 145,
-      "note": "",
-      "volumeType": "模拟卷",
-      "mockSource": "其他模拟卷",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "2023 数学一",
-      "date": "2026/09/04",
-      "score": 150,
-      "note": "",
-      "volumeType": "真题",
-      "mockSource": "",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
-      "errors": []
-    },
-    {
-      "name": "张宇八套卷卷二",
-      "date": "2026/09/05",
-      "score": 145,
-      "note": "完成时间：160min",
-      "volumeType": "模拟卷",
-      "mockSource": "其他模拟卷",
-      "strictTime": false,
-      "selScore": "",
-      "highScore": "",
-      "lineScore": "",
-      "probScore": "",
+      "yaseNo": 0,
       "errors": []
     },
     {
@@ -208,6 +87,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 1,
       "errors": []
     },
     {
@@ -222,6 +102,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 2,
       "errors": []
     },
     {
@@ -236,6 +117,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 3,
       "errors": []
     },
     {
@@ -250,6 +132,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 4,
       "errors": []
     },
     {
@@ -264,6 +147,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 5,
       "errors": []
     },
     {
@@ -278,6 +162,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 6,
       "errors": []
     },
     {
@@ -292,6 +177,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 7,
       "errors": []
     },
     {
@@ -306,6 +192,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 8,
       "errors": []
     },
     {
@@ -320,6 +207,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 9,
       "errors": []
     },
     {
@@ -334,6 +222,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 10,
       "errors": []
     },
     {
@@ -348,6 +237,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 11,
       "errors": []
     },
     {
@@ -362,6 +252,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 12,
       "errors": []
     },
     {
@@ -376,6 +267,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 13,
       "errors": []
     },
     {
@@ -390,6 +282,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 14,
       "errors": []
     },
     {
@@ -404,6 +297,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 15,
       "errors": []
     },
     {
@@ -418,6 +312,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 16,
       "errors": []
     },
     {
@@ -432,6 +327,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 17,
       "errors": []
     },
     {
@@ -446,6 +342,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 18,
       "errors": []
     },
     {
@@ -460,6 +357,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 19,
       "errors": []
     },
     {
@@ -474,6 +372,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 20,
       "errors": []
     },
     {
@@ -488,6 +387,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 21,
       "errors": []
     },
     {
@@ -502,6 +402,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 22,
       "errors": []
     },
     {
@@ -516,6 +417,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 23,
       "errors": []
     },
     {
@@ -530,6 +432,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 24,
       "errors": []
     },
     {
@@ -544,6 +447,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 25,
       "errors": []
     },
     {
@@ -558,6 +462,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 26,
       "errors": []
     },
     {
@@ -572,6 +477,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 27,
       "errors": []
     },
     {
@@ -586,6 +492,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 28,
       "errors": []
     },
     {
@@ -600,6 +507,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 29,
       "errors": []
     },
     {
@@ -614,6 +522,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 30,
       "errors": []
     },
     {
@@ -628,6 +537,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 31,
       "errors": []
     },
     {
@@ -642,6 +552,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 32,
       "errors": []
     },
     {
@@ -656,6 +567,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 33,
       "errors": []
     },
     {
@@ -670,6 +582,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 34,
       "errors": []
     },
     {
@@ -684,6 +597,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 35,
       "errors": []
     },
     {
@@ -698,6 +612,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 36,
       "errors": []
     },
     {
@@ -712,6 +627,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 37,
       "errors": []
     },
     {
@@ -726,6 +642,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 38,
       "errors": []
     },
     {
@@ -740,6 +657,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 39,
       "errors": []
     },
     {
@@ -754,6 +672,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 40,
       "errors": []
     },
     {
@@ -768,6 +687,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 41,
       "errors": []
     },
     {
@@ -782,6 +702,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 42,
       "errors": []
     },
     {
@@ -796,6 +717,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 43,
       "errors": []
     },
     {
@@ -810,6 +732,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 44,
       "errors": []
     },
     {
@@ -824,6 +747,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 45,
       "errors": []
     },
     {
@@ -838,6 +762,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 46,
       "errors": []
     },
     {
@@ -852,6 +777,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 47,
       "errors": []
     },
     {
@@ -866,6 +792,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 48,
       "errors": []
     },
     {
@@ -880,6 +807,7 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 49,
       "errors": []
     },
     {
@@ -894,23 +822,12 @@
       "highScore": "",
       "lineScore": "",
       "probScore": "",
+      "yaseNo": 50,
       "errors": []
     }
   ],
-  "target": 142,
-  "exam": "2026-12-19",
-  "checklist": {
-    "2012": "done",
-    "2013": "done",
-    "2014": "done",
-    "2015": "done",
-    "2016": "done",
-    "2017": "done",
-    "2018": "done",
-    "2019": "done",
-    "2020": "done",
-    "2021": "done",
-    "2022": "done"
-  },
-  "updatedAt": "2026-09-05T09:17:27.200Z"
+  "target": 140,
+  "exam": "2026-12-26",
+  "checklist": {},
+  "updatedAt": "2026-09-05T09:18:37.417Z"
 }
