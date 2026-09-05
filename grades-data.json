@@ -181,6 +181,20 @@
       "lineScore": "",
       "probScore": "",
       "errors": []
+    },
+    {
+      "name": "新套卷",
+      "date": "2026/09/05",
+      "score": "",
+      "note": "",
+      "volumeType": "真题",
+      "mockSource": "",
+      "strictTime": false,
+      "selScore": "",
+      "highScore": "",
+      "lineScore": "",
+      "probScore": "",
+      "errors": []
     }
   ],
   "target": 140,
@@ -198,5 +212,5 @@
     "2021": "done",
     "2022": "done"
   },
-  "updatedAt": "2026-09-04T10:05:41.950Z"
+  "updatedAt": "2026-09-05T03:55:16.714Z"
 }
