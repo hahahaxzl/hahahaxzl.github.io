@@ -965,7 +965,7 @@
       "date": "2026-09-06",
       "score": 130,
       "note": "",
-      "volumeType": "真题",
+      "volumeType": "模拟卷",
       "mockSource": "",
       "strictTime": false,
       "selScore": "",
@@ -995,5 +995,5 @@
     "2022": "done",
     "2023": "done"
   },
-  "updatedAt": "2026-09-06T03:48:32.535Z"
+  "updatedAt": "2026-09-06T03:48:35.233Z"
 }
