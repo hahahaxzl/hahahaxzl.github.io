@@ -959,6 +959,21 @@
       "probScore": "",
       "yaseNo": 50,
       "errors": []
+    },
+    {
+      "name": "新套卷",
+      "date": "2026-09-06",
+      "score": "",
+      "note": "",
+      "volumeType": "真题",
+      "mockSource": "",
+      "strictTime": false,
+      "selScore": "",
+      "highScore": "",
+      "lineScore": "",
+      "probScore": "",
+      "yaseNo": 0,
+      "errors": []
     }
   ],
   "target": {
@@ -980,5 +995,5 @@
     "2022": "done",
     "2023": "done"
   },
-  "updatedAt": "2026-09-06T03:47:32.172Z"
+  "updatedAt": "2026-09-06T03:47:35.587Z"
 }
